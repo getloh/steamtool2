@@ -1,13 +1,37 @@
 import { apiPlayerData } from '@/types/apiResponses';
 import { NextResponse } from 'next/server';
+import { apiVanityLookup } from '@/types/apiResponses';
 
 
 // This route finds the player basic information via the ID number
 export async function GET(req, { params }: any)
 {
   //Get the playerid from the params
-  const playerid = params.playerid;
+  let playerid = params.playerid;
   let data: apiPlayerData = {};
+
+  if (isNaN(playerid)){
+    await fetch(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.API_KEY}&vanityurl=${playerid}`).then(response =>
+    {
+      if (response.ok)
+      {
+        return response.json()
+      }
+      throw new Error('Request failed!');                         // Error logging
+    }, networkError =>
+    {
+      console.log("The request failed - "+ networkError.message);
+    }).then((jsonResponse : apiVanityLookup) =>
+    {
+      if (jsonResponse.response?.success == 1)             //? Got a proper response
+      {                    
+        playerid = jsonResponse.response.steamid                                    //Set the data object to the response so we can return it
+      }
+      else { 
+        console.log("Unable to find steam vanity ID")     //? Got a response but the array was empty, invalid ID
+       }
+    });
+  }
 
   await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.API_KEY}&steamids=${playerid}`).then(response =>
   {

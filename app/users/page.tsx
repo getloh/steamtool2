@@ -13,7 +13,7 @@ export default function UsersMain()
 {
 
     const [userIds, setUserIds] = useState([]);
-    const [userData, setUserData] = useState<playerIdSingle[]>([]);
+    const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);
     const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([])
     const [search, setSearch] = useState("");
     const [loadingUser, setLoadingUser] = useState(false);
@@ -24,27 +24,49 @@ export default function UsersMain()
             console.log("no user data yet, skipping..")
         }
         else {
-            console.log("game fetch goes here")
-            fetch(`/api/gamelist/${search}`)
-            .then(res => res.json())
-            .then(
-                (result: apiGamesListResponse) =>
-                {
-                    let newPlayerGameList = result;
-                    newPlayerGameList.playerid = search;
+            const idsToFetch = findNewSteamIds(userData, userGameData)
 
-                    setUserGameData([...userGameData, newPlayerGameList])
-                    setLoadingUser(false);
-                },
-                (error) =>
-                {
-                    setLoadingUser(false);
-                    setError("Failed to find user")
-                }
-            )
+            idsToFetch.map(id => {
+
+                console.log("game fetch goes here")             //usergamedata .filter (!playerids from first array)
+                fetch(`/api/gamelist/${id.steamid}`)
+                .then(res => res.json())
+                .then(
+                    (result: apiGamesListResponse) =>
+                    {
+                        let newPlayerGameList = result;
+                        newPlayerGameList.steamid = id.steamid;
+    
+                        setUserGameData([...userGameData, newPlayerGameList])
+                        setLoadingUser(false);
+                    },
+                    (error) =>
+                    {
+                        setLoadingUser(false);
+                        setError("Failed to find user")
+                    }
+                )
+
+            })
+
         }
       }, [userData]);
 
+    function findNewSteamIds(arr1: {steamid: number}[], arr2: {steamid:number}[])
+        {
+            let filteredArr = [];
+            for (let i = 0; i < arr1.length; i++)
+            {
+                let steamid = arr1[i].steamid;
+        
+                if (arr2.findIndex((obj) => obj.steamid === steamid) === -1)
+                {
+                    filteredArr.push(arr1[i])
+                }
+            }
+            return filteredArr;
+        }
+    
 
     async function fetchPlayer()
     {
@@ -52,7 +74,7 @@ export default function UsersMain()
         fetch(`/api/playerid/${search}`)
             .then(res => res.json())
             .then(
-                (result: playerIdSingle) =>
+                (result: apiPlayerIdSingle) =>
                 {
                     setUserData([...userData, result])
                     setLoadingUser(false);

@@ -48,4 +48,13 @@ export type apiGamesList = {
 export type apiGamesListResponse = {
     game_count: number,
     games: apiGameData[]
+    steamid?: number;
+}
+
+export type apiVanityLookup = {
+    response: {
+        success: 1 | 42,
+        message?: "No match",
+        steamid?: string,
+    }
 }

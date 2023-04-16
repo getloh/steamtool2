@@ -10,6 +10,7 @@ export async function GET(req, { params }: any)
   let playerid = params.playerid;
   let data: apiPlayerData = {};
 
+  /**Search for Vanity URL if the input is not a number */
   if (isNaN(playerid)){
     await fetch(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.API_KEY}&vanityurl=${playerid}`).then(response =>
     {
@@ -25,7 +26,7 @@ export async function GET(req, { params }: any)
     {
       if (jsonResponse.response?.success == 1)             //? Got a proper response
       {                    
-        playerid = jsonResponse.response.steamid                                    //Set the data object to the response so we can return it
+        playerid = jsonResponse.response.steamid      //Set playerid as the response from resolveVanityID
       }
       else { 
         console.log("Unable to find steam vanity ID")     //? Got a response but the array was empty, invalid ID
@@ -33,6 +34,7 @@ export async function GET(req, { params }: any)
     });
   }
 
+  /**API call to find ID */
   await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.API_KEY}&steamids=${playerid}`).then(response =>
   {
     if (response.ok)

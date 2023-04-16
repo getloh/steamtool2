@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import styles from './page.module.css'
 import { useState, useRef, useEffect } from 'react'
 import SearchBar from '@/components/SearchBar';
-import { apiGamesListResponse, apiPlayerIdSingle } from '@/types/apiResponses';
+import { apiGamesListResponse, apiPlayerData, apiPlayerIdSingle } from '@/types/apiResponses';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,62 +14,70 @@ export default function UsersMain()
 
     const [userIds, setUserIds] = useState([]);
     const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);
-    const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([])
+    const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([])        // An object with userID, and an array of games
     const [search, setSearch] = useState("");
     const [loadingUser, setLoadingUser] = useState(false);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        if (userData.length == 0){
+    /**If the userData state changes,  */
+    useEffect(() =>
+    {
+        if (userData.length == 0)
+        {
             console.log("no user data yet, skipping..")
         }
-        else {
+        else
+        {
             const idsToFetch = findNewSteamIds(userData, userGameData)
 
-            idsToFetch.map(id => {
-
+            idsToFetch.map(id =>
+            {
                 console.log("game fetch goes here")             //usergamedata .filter (!playerids from first array)
                 fetch(`/api/gamelist/${id.steamid}`)
-                .then(res => res.json())
-                .then(
-                    (result: apiGamesListResponse) =>
-                    {
-                        let newPlayerGameList = result;
-                        newPlayerGameList.steamid = id.steamid;
-    
-                        setUserGameData([...userGameData, newPlayerGameList])
-                        setLoadingUser(false);
-                    },
-                    (error) =>
-                    {
-                        setLoadingUser(false);
-                        setError("Failed to find user")
-                    }
-                )
+                    .then(res => res.json())
+                    .then(
+                        (result: apiGamesListResponse) =>
+                        {
+                            let newPlayerGameList = result;
+                            newPlayerGameList.steamid = Number(id.steamid);
+
+                            setUserGameData([...userGameData, newPlayerGameList])
+                            setLoadingUser(false);
+                        },
+                        (error) =>
+                        {
+                            setLoadingUser(false);
+                            setError("Failed to find user")
+                        }
+                    )
 
             })
 
         }
-      }, [userData]);
+    }, [userData]);
 
-    function findNewSteamIds(arr1: {steamid: number}[], arr2: {steamid:number}[])
+    /** Compares two arrays of objects, looks for the steamid key of both 
+     * For each userData object, we look for a userGameData object, if we don't find it, the id is returned in the array
+     **/
+    function findNewSteamIds(arr1: apiPlayerIdSingle[], arr2: apiGamesListResponse[]): apiPlayerIdSingle[]
+    {
+        let filteredArr = [];
+        for (let i = 0; i < arr1.length; i++)
         {
-            let filteredArr = [];
-            for (let i = 0; i < arr1.length; i++)
-            {
-                let steamid = arr1[i].steamid;
-        
-                if (arr2.findIndex((obj) => obj.steamid === steamid) === -1)
-                {
-                    filteredArr.push(arr1[i])
-                }
-            }
-            return filteredArr;
-        }
-    
+            let steamid = arr1[i].steamid;
 
+            if (arr2.findIndex((obj) => obj.steamid === steamid) === -1)
+            {
+                filteredArr.push(arr1[i])
+            }
+        }
+        return filteredArr;
+    }
+
+    /**Finds player based on the search state */
     async function fetchPlayer()
     {
+        setLoadingUser(true);
         console.log("FETCHPLAYER RUN")
         fetch(`/api/playerid/${search}`)
             .then(res => res.json())
@@ -96,35 +104,42 @@ export default function UsersMain()
                     <SearchBar
                         value={search}
                         onChange={(text: string) => setSearch(text)}
+                        onEnter={fetchPlayer}
                     />
                 </div>
             </div>
+            <p>Search state = {search}</p>
+
             <div className="h-auto w-auto overflow-clip">
+                <div className="border-2 border-blue-500">
 
-            <div className="h-40 w-100 overflow-scroll">
-                    {JSON.stringify(userData)}
-                </div>
-                <SearchBar
-                    value={search}
-                    onChange={(text: string) => setSearch(text)}
-                />
-                <p>Search state = {search}</p>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={fetchPlayer}>
-                    Search
-                </button>
+                    <p className="text-xl">UserData state</p>
 
-                <p style={{ color: "red" }}>Errors: {error}</p>
-
-                <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-4 w-4"></div>
-                
-                <div className="grid-cols-3">
-
-                <div className="h-40 w-100 overflow-scroll">
-                    {JSON.stringify(userGameData)}
+                    <div className="h-40 w-100 overflow-scroll">
+                        {JSON.stringify(userData)}
+                    </div>
                 </div>
 
+
+                <div className="border-2 border-orange-600">
+                    <p className="text-xl">UserGameData state</p>
+                    <div className="h-40 w-100 overflow-scroll">
+                        {JSON.stringify(userGameData)}
+                    </div>
                 </div>
-                {/* 76561197968130805 
+
+                <div className="border-2 border-yellow-600">
+                    <p style={{ color: "red" }}>Errors: {error}</p>
+                    <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-8 w-8"></div>
+                </div>
+
+                <div className="grid-cols-3 border-2 border-purple-400">
+
+
+                </div>
+                {/* 
+                Sample Player IDs
+                76561197968130805 
                 76561197964454963
                 76561197967241237
                 */}

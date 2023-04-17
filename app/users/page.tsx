@@ -6,6 +6,7 @@ import styles from './page.module.css'
 import { useState, useRef, useEffect } from 'react'
 import SearchBar from '@/components/SearchBar';
 import { apiGamesListResponse, apiPlayerData, apiPlayerIdSingle } from '@/types/apiResponses';
+import Avatar from '@/components/Avatar';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -96,9 +97,9 @@ export default function UsersMain()
     }
 
     return (
-        <div className="h-screen bg-neutral-900 text-neutral-300 w-screen">
+        <div className="min-h-screen bg-neutral-900 text-neutral-300 w-screen">
 
-            <div className="flex justify-between items-center px-10 py-5 bg-sky-950">
+            <div className="flex justify-between items-center px-10 h-16 bg-sky-950">
                 <h1>Logo</h1>
                 <div className="w-1/4">
                     <SearchBar
@@ -108,42 +109,51 @@ export default function UsersMain()
                     />
                 </div>
             </div>
-            <p>Search state = {search}</p>
 
-            <div className="h-auto w-auto overflow-clip">
-                <div className="border-2 border-blue-500">
+            <main className="flex w-100 border-2 border-pink-400 min-h-[calc(100vh-4rem)]">
+                <div id="maincontent" className="grow">
 
-                    <p className="text-xl">UserData state</p>
+                    <p>Search state = {search}</p>
 
-                    <div className="h-40 w-100 overflow-scroll">
-                        {JSON.stringify(userData)}
-                    </div>
-                </div>
+                    <div className="h-auto w-auto overflow-clip">
+                        <div className="border-2 border-blue-500">
 
+                            <p className="text-xl">UserData state</p>
 
-                <div className="border-2 border-orange-600">
-                    <p className="text-xl">UserGameData state</p>
-                    <div className="h-40 w-100 overflow-scroll">
-                        {JSON.stringify(userGameData)}
-                    </div>
-                </div>
-
-                <div className="border-2 border-yellow-600">
-                    <p style={{ color: "red" }}>Errors: {error}</p>
-                    <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-8 w-8"></div>
-                </div>
-
-                <div className="grid-cols-3 border-2 border-purple-400">
+                            <div className="h-40 w-100 overflow-scroll">
+                                {JSON.stringify(userData)}
+                            </div>
+                        </div>
 
 
-                </div>
-                {/* 
+                        <div className="border-2 border-orange-600">
+                            <p className="text-xl">UserGameData state</p>
+                            <div className="h-40 w-100 overflow-scroll">
+                                {JSON.stringify(userGameData)}
+                            </div>
+                        </div>
+
+                        <div className="border-2 border-yellow-600">
+                            <p style={{ color: "red" }}>Errors: {error}</p>
+                            <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-8 w-8"></div>
+                        </div>
+
+                        <div className="grid-cols-3 border-2 border-purple-400">
+                        </div>
+
+                        {/* 
                 Sample Player IDs
                 76561197968130805 
                 76561197964454963
                 76561197967241237
-                */}
-            </div>
+            */}
+                    </div>
+                </div>
+
+                <div id="avatararea" className="w-16 border-2 border-teal-400">
+                    <Avatar />
+                </div>
+            </main>
         </div>
     )
 }

@@ -111,7 +111,7 @@ export default function UsersMain()
             </div>
 
             <main className="flex w-100 border-2 border-pink-400 min-h-[calc(100vh-4rem)]">
-                <div id="maincontent" className="grow">
+                <div id="maincontent" className="grow pr-16">
 
                     <p>Search state = {search}</p>
 
@@ -150,9 +150,14 @@ export default function UsersMain()
                     </div>
                 </div>
 
-                <div id="avatararea" className="w-16 border-2 border-teal-400">
+                <div id="avatararea" className="border-2 border-teal-400 absolute right-0 flex-col flex items-end gap-2">
                     <Avatar />
+                    <Avatar />
+                    <Avatar />
+
+                    
                 </div>
+
             </main>
         </div>
     )

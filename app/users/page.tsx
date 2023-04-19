@@ -110,8 +110,8 @@ export default function UsersMain()
                 </div>
             </div>
 
-            <main className="flex w-100 border-2 border-pink-400 min-h-[calc(100vh-4rem)]">
-                <div id="maincontent" className="grow pr-16">
+            <main className="flex border-2 border-pink-400 min-h-[calc(100vh-4rem)]">
+                <div id="maincontent" className="pr-16 w-full">
 
                     <p>Search state = {search}</p>
 
@@ -141,24 +141,35 @@ export default function UsersMain()
                         <div className="grid-cols-3 border-2 border-purple-400">
                         </div>
 
-                        {/* 
-                Sample Player IDs
-                76561197968130805 
-                76561197964454963
-                76561197967241237
-            */}
+
                     </div>
                 </div>
 
                 <div id="avatararea" className="border-2 border-teal-400 absolute right-0 flex-col flex items-end gap-2">
-                    <Avatar />
-                    <Avatar />
-                    <Avatar />
+                    {userData.map((id)=> {
+                        return (
+                        <Avatar 
+                            data={id}
+                            enabled={true}
+                            onClose={()=>{console.log("onClose triggered")}}
+                        />
+                        )
+                    })}
+
+
 
                     
                 </div>
 
             </main>
+                                    {/* 
+                Sample Player IDs
+                76561197968130805 
+                76561197964454963
+                76561197967241237
+            */}
         </div>
+
+        
     )
 }

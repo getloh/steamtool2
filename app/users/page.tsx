@@ -5,8 +5,9 @@ import { Inter } from 'next/font/google'
 import styles from './page.module.css'
 import { useState, useRef, useEffect } from 'react'
 import SearchBar from '@/components/SearchBar';
-import { apiGamesListResponse, apiPlayerData, apiPlayerIdSingle } from '@/types/apiResponses';
+import { apiGameData, apiGamesListResponse, apiPlayerData, apiPlayerIdSingle } from '@/types/apiResponses';
 import Avatar from '@/components/Avatar';
+import GameTile from '@/components/GameTile';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,6 +20,7 @@ export default function UsersMain()
     const [search, setSearch] = useState("");
     const [loadingUser, setLoadingUser] = useState(false);
     const [error, setError] = useState("");
+    const [activeGameData, setActiveGameData] = useState<apiGameData[]>([]);
 
     /**If the userData state changes,  */
     useEffect(() =>
@@ -96,6 +98,10 @@ export default function UsersMain()
             )
     }
 
+    function testButton(){
+        setActiveGameData(userGameData[0].games)
+    }
+
     return (
         <div className="min-h-screen bg-neutral-900 text-neutral-300 w-screen">
 
@@ -132,13 +138,29 @@ export default function UsersMain()
                                 {JSON.stringify(userGameData)}
                             </div>
                         </div>
+                        <div className="border-2 border-red-600">
+                            <p className="text-xl">ActiveGameData state</p>
+                            <div className="h-40 w-100 overflow-scroll">
+                                {JSON.stringify(activeGameData)}
+                            </div>
+                        </div>
 
                         <div className="border-2 border-yellow-600">
                             <p style={{ color: "red" }}>Errors: {error}</p>
                             <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-8 w-8"></div>
                         </div>
+                        <button onClick={testButton} className="px-4 py-2 bg-cyan-600 rounded hover:bg-cyan-800 transition text-cyan-50">
+                            <p>test</p>
+                        </button>
 
-                        <div className="grid-cols-3 border-2 border-purple-400">
+                        <div className="grid grid-cols-3 border-2 border-purple-400 gap-4">
+                            {activeGameData.map(game=> {
+                                return(
+                                    <GameTile 
+                                        data={game}
+                                    />
+                                )
+                            })}
                         </div>
 
 

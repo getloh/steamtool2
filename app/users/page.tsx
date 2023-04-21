@@ -22,13 +22,15 @@ export default function UsersMain()
     const [loadingUser, setLoadingUser] = useState(false);
     const [error, setError] = useState("");
     const [activeGameData, setActiveGameData] = useState<apiGameData[]>([]);
+    const [loadingGames, setLoadingGames] = useState(false);
 
     /**If the userData state changes,  */
     useEffect(() =>
     {
         if (userData.length == 0)
         {
-            console.log("no user data yet, skipping..")
+            // console.log("no user data yet, skipping..")
+            return
         }
         else
         {
@@ -41,7 +43,7 @@ export default function UsersMain()
                     console.log("data already found, skipping fetch")
                     return
                 }
-                console.log("game fetch goes here")             //usergamedata .filter (!playerids from first array)
+                // console.log("game fetch goes here")             //usergamedata .filter (!playerids from first array)
                 fetch(`/api/gamelist/${id.steamid}`)
                     .then(res => res.json())
                     .then(
@@ -59,9 +61,7 @@ export default function UsersMain()
                             setError("Failed to find user")
                         }
                     )
-
             })
-
         }
     }, [userData]);
 
@@ -95,6 +95,7 @@ export default function UsersMain()
                 {
                     setUserData([...userData, result])
                     setLoadingUser(false);
+                    setSearch("");
                 },
                 (error) =>
                 {
@@ -104,8 +105,10 @@ export default function UsersMain()
             )
     }
 
+    // When the userGameData changes (fetch completes), go through the list to general the combined games list
+    // This includes adding the userid to each gameobject so we know who owns what
     useEffect(() => {
-        console.log("test")
+        setLoadingGames(true);
         // Set the activegameData state to an array of all the games, 
         // setActiveGameData(userGameData[0].games)
         let agd = activeGameData?.slice();
@@ -116,7 +119,7 @@ export default function UsersMain()
                 console.log("user already found! - " + user)
                 return;
             }
-            userGameDataSingle.games.map((game)=>{
+            userGameDataSingle.games?.map((game)=>{
                 // if (agd.findIndex)
                 // console.log(game)
                 let gameObj = game;
@@ -136,7 +139,9 @@ export default function UsersMain()
             })
         })
         console.log(agd)
+
         setActiveGameData(agd)
+        setLoadingGames(false);
 
     },[userGameData] )
 
@@ -197,43 +202,49 @@ export default function UsersMain()
             <main className="flex border-2 border-pink-400 min-h-[calc(100vh-4rem)]">
                 <div id="maincontent" className="pr-20 w-full">
 
-                    <p>Search state = {search}</p>
+                    {/* <p>Search state = {search}</p> */}
 
                     <div className="h-auto w-auto overflow-clip">
-                        <div className="border-2 border-blue-500">
+                        {/* <div className="border-2 border-blue-500">
 
                             <p className="text-xl">UserData state</p>
 
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userData)}
                             </div>
-                        </div>
+                        </div> */}
 
 
-                        <div className="border-2 border-orange-600">
+                        {/* <div className="border-2 border-orange-600">
                             <p className="text-xl">UserGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userGameData)}
                             </div>
-                        </div>
-                        <div className="border-2 border-red-600">
+                        </div> */}
+
+                        {/* <div className="border-2 border-red-600">
                             <p className="text-xl">ActiveGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(activeGameData)}
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="border-2 border-yellow-600">
                             <p style={{ color: "red" }}>Errors: {error}</p>
                             <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-8 w-8"></div>
+
+                            <div style={{ backgroundColor: loadingGames ? "orange" : "lime" }} className="h-8 w-8"></div>
+
                         </div>
                         <button onClick={testButton} className="px-4 py-2 bg-cyan-600 rounded hover:bg-cyan-800 transition text-cyan-50">
                             <p>test</p>
                         </button>
 
                         <div className="grid grid-cols-3 border-2 border-purple-400 gap-4">
-                            {activeGameData.map(game=> {
-
+                            {activeGameData
+                            .sort((a,b)=> a.name.localeCompare(b.name))
+                            .sort((a, b)=> b.users.length - a.users.length)
+                            .map(game=> {
                                 const userArr: apiPlayerIdSingle[] = [];
                                 game.users?.map((user)=> userArr.push(userData.find(element => element.steamid == user )) )
 

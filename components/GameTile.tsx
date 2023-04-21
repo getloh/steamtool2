@@ -20,7 +20,7 @@ export default function GameTile(props: GameTileProps)
                 {props.users.map((user) =>
                 {
                     return (
-                        <img className="h-6 w-6 rounded-md" src={user.avatar} />
+                        <img className="h-6 w-6 rounded-md" src={user.avatar} key={user.steamid}/>
                     )
                 })}
             </div>

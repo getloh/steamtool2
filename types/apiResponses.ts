@@ -38,7 +38,9 @@ export type apiGameData = {
     playtime_mac_forever: number,
     playtime_linux_forever: number,
     rtime_last_played: number,
-    content_descriptorids: number[]
+    content_descriptorids: number[],
+    users?: string[]
+
 }
 
 export type apiGamesList = {
@@ -47,7 +49,7 @@ export type apiGamesList = {
 
 export type apiGamesListResponse = {
     game_count: number,
-    games: apiGameData[]
+    games: apiGameData[],
     steamid?: number;
 }
 

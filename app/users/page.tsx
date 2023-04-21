@@ -15,8 +15,9 @@ export default function UsersMain()
 {
 
     const [userIds, setUserIds] = useState([]);
+    const [activeUserIds, setActiveUserIds] = useState([]);
     const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);
-    const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([])        // An object with userID, and an array of games
+    const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([]);        // An object with userID, and an array of games
     const [search, setSearch] = useState("");
     const [loadingUser, setLoadingUser] = useState(false);
     const [error, setError] = useState("");
@@ -31,10 +32,15 @@ export default function UsersMain()
         }
         else
         {
+            console.log("userData state useffect fired")
             const idsToFetch = findNewSteamIds(userData, userGameData)
 
             idsToFetch.map(id =>
             {
+                if (userGameData.findIndex((gameDataSet) => gameDataSet.steamid == id) !== -1){
+                    console.log("data already found, skipping fetch")
+                    return
+                }
                 console.log("game fetch goes here")             //usergamedata .filter (!playerids from first array)
                 fetch(`/api/gamelist/${id.steamid}`)
                     .then(res => res.json())
@@ -98,9 +104,81 @@ export default function UsersMain()
             )
     }
 
+    useEffect(() => {
+        console.log("test")
+        // Set the activegameData state to an array of all the games, 
+        // setActiveGameData(userGameData[0].games)
+        let agd = activeGameData?.slice();
+        userGameData.map((userGameDataSingle) => {
+            const user = userGameDataSingle.steamid;
+            console.log(user)
+            if (agd.findIndex((singlegame) => singlegame.users?.includes(user)) !== -1){
+                console.log("user already found! - " + user)
+                return;
+            }
+            userGameDataSingle.games.map((game)=>{
+                // if (agd.findIndex)
+                // console.log(game)
+                let gameObj = game;
+                let gameIndex = agd.findIndex((singlegame)=> singlegame.appid == game.appid);
+                if (gameIndex == -1){
+                    gameObj.users = [user];
+                    agd.push(gameObj)
+                    // console.log(game + "pushed")
+                }
+                else {
+                    agd[gameIndex].users = [...agd[gameIndex].users, user];
+                }
+/** for each game
+ * if game.appid exists in the activegamedata array's list of objects
+ */
+
+            })
+        })
+        console.log(agd)
+        setActiveGameData(agd)
+
+    },[userGameData] )
+
     function testButton(){
-        setActiveGameData(userGameData[0].games)
+        console.log("test")
+        // Set the activegameData state to an array of all the games, 
+        // setActiveGameData(userGameData[0].games)
+        let agd = activeGameData?.slice();
+        userGameData.map((userGameDataSingle) => {
+            const user = userGameDataSingle.steamid;
+            console.log(user)
+            if (agd.findIndex((singlegame) => singlegame.users?.includes(user)) !== -1){
+                console.log("user already found! - " + user)
+                return;
+            }
+            userGameDataSingle.games.map((game)=>{
+                // if (agd.findIndex)
+                // console.log(game)
+                let gameObj = game;
+                let gameIndex = agd.findIndex((singlegame)=> singlegame.appid == game.appid);
+                if (gameIndex == -1){
+                    gameObj.users = [user];
+                    agd.push(gameObj)
+                    // console.log(game + "pushed")
+                }
+                else {
+                    agd[gameIndex].users = [...agd[gameIndex].users, user];
+                }
+/** for each game
+ * if game.appid exists in the activegamedata array's list of objects
+ */
+
+            })
+        })
+        console.log(agd)
+        setActiveGameData(agd)
     }
+
+    useEffect(()=>{
+        console.log("state was updated!")
+        // console.log(activeGameData)
+    }, [activeGameData])
 
     return (
         <div className="min-h-screen bg-neutral-900 text-neutral-300 w-screen">
@@ -117,7 +195,7 @@ export default function UsersMain()
             </div>
 
             <main className="flex border-2 border-pink-400 min-h-[calc(100vh-4rem)]">
-                <div id="maincontent" className="pr-16 w-full">
+                <div id="maincontent" className="pr-20 w-full">
 
                     <p>Search state = {search}</p>
 
@@ -155,9 +233,15 @@ export default function UsersMain()
 
                         <div className="grid grid-cols-3 border-2 border-purple-400 gap-4">
                             {activeGameData.map(game=> {
+
+                                const userArr: apiPlayerIdSingle[] = [];
+                                game.users?.map((user)=> userArr.push(userData.find(element => element.steamid == user )) )
+
                                 return(
                                     <GameTile 
+                                        key={game.appid}
                                         data={game}
+                                        users={userArr}
                                     />
                                 )
                             })}
@@ -167,10 +251,11 @@ export default function UsersMain()
                     </div>
                 </div>
 
-                <div id="avatararea" className="border-2 border-teal-400 absolute right-0 flex-col flex items-end gap-2">
+                <div id="avatararea" className="border-2 border-teal-400 fixed right-0 flex-col flex items-end gap-2">
                     {userData.map((id)=> {
                         return (
                         <Avatar 
+                            key={id.steamid}
                             data={id}
                             enabled={true}
                             onClose={()=>{console.log("onClose triggered")}}
@@ -187,7 +272,7 @@ export default function UsersMain()
                                     {/* 
                 Sample Player IDs
                 76561197968130805 
-                76561197964454963
+                https://steamcommunity.com/profiles/76561198068117347/
                 76561197967241237
             */}
         </div>

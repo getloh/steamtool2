@@ -222,12 +222,12 @@ export default function UsersMain()
                             </div>
                         </div> */}
 
-                        {/* <div className="border-2 border-red-600">
+                        <div className="border-2 border-red-600">
                             <p className="text-xl">ActiveGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(activeGameData)}
                             </div>
-                        </div> */}
+                        </div>
 
                         <div className="border-2 border-yellow-600">
                             <p style={{ color: "red" }}>Errors: {error}</p>

@@ -1,4 +1,4 @@
 export interface SvgProps{
-    size?: number;
+    size?: number | string;
     color?: string;
 }

@@ -240,7 +240,7 @@ export default function UsersMain()
                             <p>test</p>
                         </button>
 
-                        <div className="grid grid-cols-3 border-2 border-purple-400 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 border-2 border-purple-400 gap-4">
                             {activeGameData
                             .sort((a,b)=> a.name.localeCompare(b.name))
                             .sort((a, b)=> b.users.length - a.users.length)

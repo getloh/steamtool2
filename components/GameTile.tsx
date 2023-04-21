@@ -1,6 +1,7 @@
 import { apiGameData, apiPlayerIdSingle } from "@/types/apiResponses"
 import Image from "next/image";
 import SteamIcon from "./icons/SteamIcon";
+import classNames from "classnames";
 
 export interface GameTileProps
 {
@@ -12,24 +13,24 @@ export interface GameTileProps
 export default function GameTile(props: GameTileProps)
 {
 
-
-
     return (
-        <div className="p-4 bg-zinc-950 flex justify-between relative rounded-md">
-            <div className="flex z-10 border">
+        <div className="p-4 bg-zinc-950 flex justify-between relative rounded-md hover:bg-teal-900">
+            <div className="flex z-10 items-center">
 
                 <img className="w-10 h-10 mr-2" alt={props.data.name + " icon"} src={"http://media.steampowered.com/steamcommunity/public/images/apps/" + props.data.appid + "/" + props.data.img_icon_url + ".jpg"}></img>
 
-                <div className="">
-                    <p className="">{props.data.name}</p>
-                    <p className="text-xs">{props.data.appid}</p>
+                <div className="flex flex-col justify-center block">
+                    <p className={props.data.name.length > 25 ? "text-sm xl:text-base" : "text-md xl:text-lg"}>{props.data.name}</p>
+                    <p className="text-2xs opacity-40">AppID: {props.data.appid}</p>
                 </div>
             </div>
 
-            <div className="-mt-2 -mr-2">
-                <button className="fill-white opacity-50 hover:opacity-100 transition h-6 w-6 overflow-hidden object-contain ">
-                <SteamIcon size={"100%"}/>
-                </button>
+            <div className="-mt-2 -mr-2 ml-6">
+                <a href={"https://store.steampowered.com/app/" + props.data.appid} target="_blank">
+                    <button className=" fill-zinc-950 opacity-80 hover:opacity-80 hover:fill-white transition h-6 w-6 overflow-hidden object-contain">
+                        <SteamIcon size={"100%"} />
+                    </button>
+                </a>
             </div>
 
 

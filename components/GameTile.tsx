@@ -14,7 +14,7 @@ export default function GameTile(props: GameTileProps)
 {
 
     return (
-        <div className="p-4 bg-zinc-950 flex justify-between relative rounded-md hover:bg-teal-900">
+        <div className="p-4 bg-zinc-950 flex justify-between relative rounded-md hover:bg-teal-900 group">
             <div className="flex z-10 items-center">
 
                 <img className="w-10 h-10 mr-2" alt={props.data.name + " icon"} src={"http://media.steampowered.com/steamcommunity/public/images/apps/" + props.data.appid + "/" + props.data.img_icon_url + ".jpg"}></img>
@@ -25,9 +25,9 @@ export default function GameTile(props: GameTileProps)
                 </div>
             </div>
 
-            <div className="-mt-2 -mr-2 ml-6">
+            <div className="-mt-2 -mr-2 ml-6 ">
                 <a href={"https://store.steampowered.com/app/" + props.data.appid} target="_blank">
-                    <button className=" fill-zinc-950 opacity-80 hover:opacity-80 hover:fill-white transition h-6 w-6 overflow-hidden object-contain">
+                    <button className="fill-white opacity-0 hover:!opacity-100 hover:fill-white h-6 w-6 overflow-hidden object-contain group-hover:opacity-20">
                         <SteamIcon size={"100%"} />
                     </button>
                 </a>

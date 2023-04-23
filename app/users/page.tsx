@@ -8,6 +8,8 @@ import SearchBar from '@/components/SearchBar';
 import { apiGameData, apiGamesListResponse, apiPlayerData, apiPlayerIdSingle } from '@/types/apiResponses';
 import Avatar from '@/components/Avatar';
 import GameTile from '@/components/GameTile';
+import Modal from '@/components/Modal';
+import PlayerModal from '@/components/PlayerModal';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,6 +25,7 @@ export default function UsersMain()
     const [error, setError] = useState("");
     const [activeGameData, setActiveGameData] = useState<apiGameData[]>([]);
     const [loadingGames, setLoadingGames] = useState(false);
+    const [userModal, setUserModal] = useState<apiPlayerIdSingle>();
 
     /**If the userData state changes,  */
     useEffect(() =>
@@ -146,38 +149,7 @@ export default function UsersMain()
     },[userGameData] )
 
     function testButton(){
-        console.log("test")
-        // Set the activegameData state to an array of all the games, 
-        // setActiveGameData(userGameData[0].games)
-        let agd = activeGameData?.slice();
-        userGameData.map((userGameDataSingle) => {
-            const user = userGameDataSingle.steamid;
-            console.log(user)
-            if (agd.findIndex((singlegame) => singlegame.users?.includes(user)) !== -1){
-                console.log("user already found! - " + user)
-                return;
-            }
-            userGameDataSingle.games.map((game)=>{
-                // if (agd.findIndex)
-                // console.log(game)
-                let gameObj = game;
-                let gameIndex = agd.findIndex((singlegame)=> singlegame.appid == game.appid);
-                if (gameIndex == -1){
-                    gameObj.users = [user];
-                    agd.push(gameObj)
-                    // console.log(game + "pushed")
-                }
-                else {
-                    agd[gameIndex].users = [...agd[gameIndex].users, user];
-                }
-/** for each game
- * if game.appid exists in the activegamedata array's list of objects
- */
-
-            })
-        })
-        console.log(agd)
-        setActiveGameData(agd)
+        setUserModal(userData[0])
     }
 
     useEffect(()=>{
@@ -187,7 +159,13 @@ export default function UsersMain()
 
     return (
         <div className="min-h-screen bg-neutral-900 text-neutral-300 w-screen">
+            <PlayerModal 
+            visible={userModal?.steamid !== undefined}
+            onClose={()=>{setUserModal(undefined)}}
+            />
+            {/* <Modal 
 
+            ></Modal> */}
             <div className="flex justify-between items-center px-10 h-16 bg-sky-950">
                 <h1>Logo</h1>
                 <div className="w-1/4">
@@ -222,10 +200,17 @@ export default function UsersMain()
                             </div>
                         </div> */}
 
-                        <div className="border-2 border-red-600">
+                        {/* <div className="border-2 border-red-600">
                             <p className="text-xl">ActiveGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(activeGameData)}
+                            </div>
+                        </div> */}
+
+                        <div className="border-2 border-red-600">
+                            <p className="text-xl">UserModal</p>
+                            <div className="h-40 w-100 overflow-scroll">
+                                {JSON.stringify(userModal)}
                             </div>
                         </div>
 
@@ -236,6 +221,7 @@ export default function UsersMain()
                             <div style={{ backgroundColor: loadingGames ? "orange" : "lime" }} className="h-8 w-8"></div>
 
                         </div>
+
                         <button onClick={testButton} className="px-4 py-2 bg-cyan-600 rounded hover:bg-cyan-800 transition text-cyan-50">
                             <p>test</p>
                         </button>
@@ -257,8 +243,6 @@ export default function UsersMain()
                                 )
                             })}
                         </div>
-
-
                     </div>
                 </div>
 
@@ -274,7 +258,7 @@ export default function UsersMain()
                         )
                     })}
 
-
+                
 
                     
                 </div>

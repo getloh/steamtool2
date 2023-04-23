@@ -14,7 +14,7 @@ export default function GameTile(props: GameTileProps)
 {
 
     return (
-        <div className="p-4 bg-zinc-950 flex justify-between relative rounded-md hover:bg-teal-900 group">
+        <div className="p-4 bg-neutral-950 flex justify-between relative rounded-md hover:bg-sky-950 group">
             <div className="flex z-10 items-center">
 
                 <img className="w-10 h-10 mr-2" alt={props.data.name + " icon"} src={"http://media.steampowered.com/steamcommunity/public/images/apps/" + props.data.appid + "/" + props.data.img_icon_url + ".jpg"}></img>

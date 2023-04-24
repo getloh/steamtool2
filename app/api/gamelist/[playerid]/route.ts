@@ -9,7 +9,7 @@ export async function GET(req, { params }: any)
   const playerid = params.playerid;
   let data = {};
 
-  await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${process.env.API_KEY}&steamid=${playerid}&format=json&include_appinfo=true&include_played_free_games=true`).then(response =>
+  await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${process.env.API_KEY}&steamid=${playerid}&format=json&include_appinfo=true&include_played_free_games=true`).then(response =>
   {
     if (response.ok)
     {
@@ -21,7 +21,7 @@ export async function GET(req, { params }: any)
     console.log("The request failed - "+ networkError.message);
   }).then((jsonResponse : apiGamesList) =>
   {
-    console.log(jsonResponse)
+    // console.log(jsonResponse)
     if (jsonResponse.response?.length !== 0)             //? Got a proper response
     {                    
       data = jsonResponse;                                      //Set the data object to the response so we can return it

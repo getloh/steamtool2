@@ -23,7 +23,7 @@ export default function GameTile(props: GameTileProps)
                 <div className="w-10 h-10 mr-2"></div>    
             }
 
-                <div className="flex flex-col justify-center block">
+                <div className="flex flex-col justify-center">
                     <p className={props.data.name.length > 25 ? "text-sm xl:text-base" : "text-md xl:text-lg"}>{props.data.name}</p>
                     <p className="text-2xs opacity-40">AppID: {props.data.appid}</p>
                 </div>

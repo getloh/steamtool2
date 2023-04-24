@@ -12,6 +12,7 @@ export interface AvatarProps
     data: apiPlayerIdSingle;
     enabled: boolean;
     onClose: Function;
+    onOpen: Function;
 }
 
 export default function Avatar(props: AvatarProps)
@@ -57,7 +58,7 @@ export default function Avatar(props: AvatarProps)
 
             </div>
 
-            <div className="w-16 aspect-square p-1 cursor-pointer ">
+            <div className="w-16 aspect-square p-1 cursor-pointer " onClick={props.onOpen}>
                 <img src={props.data?.avatarmedium} className="h-full w-full rounded-md" />
             </div>
         </div>

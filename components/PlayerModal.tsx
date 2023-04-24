@@ -23,11 +23,17 @@ export default function PlayerModal(props: PlayerModalProps)
             visible={props.visible}
             onClose={props.onClose}
         >
-            <div className="bg-white w-2/3 h-2/3 z-30">
-                <button className="w-80 h-80 bg-teal-700" onClick={()=>console.log("TEST")}>
+            {/* <div className="bg-white w-full h-full z-30 rounded-md p-2"> */}
+                {/* <button className="w-80 h-80 bg-teal-700" onClick={()=>console.log("TEST")}>
                     <p>PRESS MEEEE</p>
-                </button>
+                </button> */}
                 
+            {/* </div> */}
+            <div className="w-full border-2 border-red-700">
+
+            <p className="t">{props.data?.personaname}</p>
+            <p className="1">{props.data?.realname}</p>
+            <p className="2">{props.data?.avatar}</p>
             </div>
         </Modal>
     )

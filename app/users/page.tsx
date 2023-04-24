@@ -162,10 +162,9 @@ export default function UsersMain()
             <PlayerModal 
             visible={userModal?.steamid !== undefined}
             onClose={()=>{setUserModal(undefined)}}
+            data={userModal}
             />
-            {/* <Modal 
 
-            ></Modal> */}
             <div className="flex justify-between items-center px-10 h-16 bg-sky-950">
                 <h1>Logo</h1>
                 <div className="w-1/4">
@@ -200,19 +199,19 @@ export default function UsersMain()
                             </div>
                         </div> */}
 
-                        {/* <div className="border-2 border-red-600">
+                        <div className="border-2 border-red-600">
                             <p className="text-xl">ActiveGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(activeGameData)}
                             </div>
-                        </div> */}
+                        </div>
 
-                        <div className="border-2 border-red-600">
+                        {/* <div className="border-2 border-red-600">
                             <p className="text-xl">UserModal</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userModal)}
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="border-2 border-yellow-600">
                             <p style={{ color: "red" }}>Errors: {error}</p>
@@ -247,13 +246,14 @@ export default function UsersMain()
                 </div>
 
                 <div id="avatararea" className="border-2 border-teal-400 fixed right-0 flex-col flex items-end gap-2">
-                    {userData.map((id)=> {
+                    {userData.map((id, index)=> {
                         return (
                         <Avatar 
                             key={id.steamid}
                             data={id}
                             enabled={true}
                             onClose={()=>{console.log("onClose triggered")}}
+                            onOpen={() => {setUserModal(userData[index])}}
                         />
                         )
                     })}

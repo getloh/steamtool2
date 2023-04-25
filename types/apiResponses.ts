@@ -20,7 +20,8 @@ export type apiPlayerIdSingle = {
     gameextrainfo?: string,
     gameid?: string,
     loccountrycode?: string,
-    locstatecode?: string
+    locstatecode?: string,
+    loccityid?: string;
 }
 
 export type apiPlayerData = {

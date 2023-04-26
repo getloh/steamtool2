@@ -39,7 +39,7 @@ export default function UsersMain()
         {
             console.log("userData state useffect fired")
             const idsToFetch = findNewSteamIds(userData, userGameData)
-
+            console.log("I should fetch - " + idsToFetch)
             idsToFetch.map(id =>
             {
                 if (userGameData.findIndex((gameDataSet) => gameDataSet.steamid == id) !== -1){
@@ -117,7 +117,7 @@ export default function UsersMain()
         let agd = activeGameData?.slice();
         userGameData.map((userGameDataSingle) => {
             const user = userGameDataSingle.steamid;
-            console.log(user)
+            console.log("Trying to update the activeGameData list with " + user)
             if (agd.findIndex((singlegame) => singlegame.users?.includes(user)) !== -1){
                 console.log("user already found! - " + user)
                 return;

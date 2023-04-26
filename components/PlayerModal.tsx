@@ -104,6 +104,12 @@ export default function PlayerModal(props: PlayerModalProps)
                                     <SteamIcon size={"100%"} />
                                 </button>
                             </a>
+                            <button className=" fill-teal-500 h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500" onClick={() => {console.log(props.data)}}>
+                                    <p className="">PlayerData</p>
+                                </button>
+                            <button className=" fill-red-500 h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500" onClick={() => {console.log(props.games)}}>
+                                    <p>gameData</p>
+                                </button>
                         </div>
                     </div>
                     {/* <p style={{fontSize: "4px"}} className="">{JSON.stringify(props.games)}</p> */}

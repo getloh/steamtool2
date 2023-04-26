@@ -6,22 +6,24 @@ import classNames from "classnames";
 export interface GameTileProps
 {
     data: apiGameData;
-    users: apiPlayerIdSingle[];
+    users?: apiPlayerIdSingle[];
+    hours?: boolean;
 }
 
 
 export default function GameTile(props: GameTileProps)
 {
 
+
     return (
         <div className="p-4 bg-neutral-950 flex justify-between relative rounded-md hover:bg-sky-950 group">
             <div className="flex z-10 items-center">
-                {props.data.img_icon_url !== "" ? 
-                
-                <img className="w-10 h-10 mr-2" alt={props.data.name + " icon"} src={"http://media.steampowered.com/steamcommunity/public/images/apps/" + props.data.appid + "/" + props.data.img_icon_url + ".jpg"}></img>
-                : 
-                <div className="w-10 h-10 mr-2"></div>    
-            }
+                {props.data.img_icon_url !== "" ?
+
+                    <img className="w-10 h-10 mr-2" alt={props.data.name + " icon"} src={"http://media.steampowered.com/steamcommunity/public/images/apps/" + props.data.appid + "/" + props.data.img_icon_url + ".jpg"}></img>
+                    :
+                    <div className="w-10 h-10 mr-2"></div>
+                }
 
                 <div className="flex flex-col justify-center">
                     <p className={props.data.name.length > 25 ? "text-sm xl:text-base" : "text-md xl:text-lg"}>{props.data.name}</p>
@@ -39,15 +41,26 @@ export default function GameTile(props: GameTileProps)
 
 
 
+            {props.users ?
+                <div className="flex justify-end items-end gap-1 absolute bottom-2 right-2 z-0 opacity-80">
+                    {props.users?.map((user) =>
+                    {
+                        return (
+                            <img className="h-6 w-6 rounded-md" src={user.avatar} key={user.steamid} />
+                        )
+                    })}
+                </div>
 
-            <div className="flex justify-end items-end gap-1 absolute bottom-2 right-2 z-0 opacity-80">
-                {props.users.map((user) =>
-                {
-                    return (
-                        <img className="h-6 w-6 rounded-md" src={user.avatar} key={user.steamid} />
-                    )
-                })}
-            </div>
+                :
+                <div className="flex justify-end items-end gap-1 absolute bottom-2 right-2 z-0 opacity-80">
+                    {props.data.playtime_forever !== 0 ? 
+                    <p className="">{Math.round(props.data.playtime_forever / 60)} Hrs</p>
+                    :
+                    <p className="">Unplayed</p>
+                    }
+
+                </div>
+            }
 
         </div>
     )

@@ -29,35 +29,27 @@ export default function Modal(props: ModalProps)
         props.onClose();
     }
 
-    //TODO: Make the outside bit clickable and trigger onclose
-
     return (
         <div className={modalStyles}
         >
-            <button className="absolute top-0 right-0 " onClick={onClose}>
+            <button className="absolute top-0 right-0" onClick={onClose}>
                 <p>Close</p>
             </button>
 
-            <div className="h-1/6 w-full "
-                onClick={onClose}
-            ></div>
-            <div className="h-3/4 w-full flex">
-                <div className="w-1/6" onClick={onClose}
+            <div className="h-1/6 w-full"onClick={onClose} id="MODALTOP"/>
 
-                ></div>
+            <div className="w-full flex flex-grow justify-center">
+                <div className="flex-grow" onClick={onClose}/>
                 <div className="w-3/4 rounded-md p-2">
                     <div className="w-full h-full z-30 rounded-md p-1 bg-neutral-900">
 
                         {props.children}
                     </div>
                 </div>
-                <div className="w-1/6" onClick={onClose}
-
-                ></div>
+                <div className="flex-grow" onClick={onClose}/>
             </div>
-            <div className="h-1/6 w-full" onClick={onClose}
-
-            ></div>
+            
+            <div className="h-1/6 w-full" onClick={onClose} id="MODALBOTTOM"/>
         </div>
     )
 }

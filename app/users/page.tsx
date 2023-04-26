@@ -233,7 +233,7 @@ export default function UsersMain()
                                     <GameTile 
                                         key={game.appid}
                                         data={game}
-                                        users={userArr}
+                                        users={userData.length > 1 ? userArr : undefined}
                                     />
                                 )
                             })}

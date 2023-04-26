@@ -159,11 +159,7 @@ export default function UsersMain()
 
     return (
         <div className="min-h-screen bg-neutral-900 text-neutral-300 w-screen">
-            <PlayerModal 
-            visible={userModal?.steamid !== undefined}
-            onClose={()=>{setUserModal(undefined)}}
-            data={userModal}
-            />
+
 
             <div className="flex justify-between items-center px-10 h-16 bg-sky-950">
                 <h1>Logo</h1>
@@ -192,19 +188,19 @@ export default function UsersMain()
                         </div> */}
 
 
-                        {/* <div className="border-2 border-orange-600">
+                        <div className="border-2 border-orange-600">
                             <p className="text-xl">UserGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userGameData)}
                             </div>
-                        </div> */}
+                        </div>
 
-                        <div className="border-2 border-red-600">
+                        {/* <div className="border-2 border-red-600">
                             <p className="text-xl">ActiveGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(activeGameData)}
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* <div className="border-2 border-red-600">
                             <p className="text-xl">UserModal</p>
@@ -270,6 +266,13 @@ export default function UsersMain()
                 https://steamcommunity.com/profiles/76561198068117347/
                 76561197967241237
             */}
+            <PlayerModal 
+            visible={userModal?.steamid !== undefined}
+            onClose={()=>{setUserModal(undefined)}}
+            data={userModal}
+            games={userGameData.filter(item => item?.steamid == userModal?.steamid)[0]}
+            />
+
         </div>
 
         

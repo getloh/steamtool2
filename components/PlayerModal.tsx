@@ -1,6 +1,6 @@
 
 
-import { apiPlayerIdSingle } from "@/types/apiResponses"
+import { apiGamesListResponse, apiPlayerIdSingle } from "@/types/apiResponses"
 import { useState, useEffect } from "react";
 import classNames from "classnames";
 import VisibilityIcon from "./icons/VisibilityIcon";
@@ -12,6 +12,7 @@ import Image from "next/image";
 export interface PlayerModalProps
 {
     data?: apiPlayerIdSingle;
+    games?: apiGamesListResponse;
     visible: boolean;
     onClose: Function;
 }
@@ -19,9 +20,20 @@ export interface PlayerModalProps
 export default function PlayerModal(props: PlayerModalProps)
 {
 
-    function unixToDate(unix: number){
+    function unixToDate(unix: number)
+    {
         let date = new Date(unix * 1000)
         return date.toDateString();
+    }
+
+    function getHoursPlayed()
+    {
+        let mins = props.games?.games.reduce((a, b) => a + b.playtime_forever, 0);
+        if (mins !== undefined)
+        {
+            return Math.round(mins / 60);
+        }
+        return "No Data"
     }
 
     return (
@@ -35,26 +47,50 @@ export default function PlayerModal(props: PlayerModalProps)
                 </button> */}
 
             {/* </div> */}
-            <div className="w-full border-2 border-red-700 p-2">
+            <div className="w-full border-2 border-red-700 p-2 h-full">
                 <div className="flex">
-                    <Image src={props.data?.avatarfull} height={200} width={200} alt="avatar"/>
+                    <Image src={props.data?.avatarfull} height={200} width={200} alt="avatar" className="aspect-square" />
                     <div className="ml-2">
                         <p className=" text-6xl">{props.data?.personaname}</p>
-                        <p className=" text-xl">{props.data?.realname}</p>
-                <p className="text-sm">SteamID: {props.data?.steamid}</p>
-                {/* unixToDate(props.data?.timecreated) */}
+                        {props.data?.communityvisibilitystate === 3 ?
+                            <div>
+
+                                <p className=" text-2xl">{props.data?.realname}</p>
+                                <p className="">Account Created: {props.data?.timecreated ? unixToDate(props.data.timecreated) : "X"}</p>
+                                <p className="1">{props.data?.lastlogoff ? "Last Update: " + unixToDate(props.data.lastlogoff) : ""}</p>
+                                <p className={props.data?.personastate === 1 ? "text-green-500" : "text-neutral-500"}>{props.data?.personastate === 1 ? "Online" : "Offline"}</p>
+                                <p className="text-2xs">Location Code: {props.data?.loccountrycode}</p>
+                                <p className="text-2xs">SteamID: {props.data?.steamid}</p>
+                            </div>
+                            :
+                            <div>
+                                <p className="font-bold">This account is private</p>
+                                <p>If this is your account, click below see more info on how to make account public</p>
+                                <a href="https://help.steampowered.com/en/faqs/view/588C-C67D-0251-C276" target="_blank" >
+                                    <button className="p-2 bg-sky-800 hover:bg-sky-600 mt-2 rounded-md">
+                                        Steam FAQ
+                                    </button>
+                                </a>
+                            </div>
+
+                        }
                     </div>
                 </div>
-                <p className="1">{props.data?.lastlogoff ? "Last Update: " + unixToDate(props.data.lastlogoff) : ""}</p>
-                <p className="text-4xl text-red-700">{props.data?.gameid}</p>
-                <p className="text-blue-700">Account Created: {props.data?.timecreated ? unixToDate(props.data.timecreated) : "X"}</p>
+                <div className="flex border justify-between">
 
-                <p className="text-green-500">{props.data?.personastate === 1 ? "Online" : "Offline"}</p>
+                    <div>
+                        <p className="text-2xl">Most played games</p>
+                    </div>
 
-                <p className="1">{props.data?.communityvisibilitystate === 3 ? "Public" : "Private"}</p>
-
-                <p className="text-blue-700">Location Code: {props.data?.loccountrycode}</p>
-
+                    {props.games?.games ?
+                        <div>
+                            <p className="text-blue-200">Total Games: {props.games?.game_count}</p>
+                            <p className="text-blue-200 text-2xs">Total hours played: {getHoursPlayed()}</p>
+                        </div>
+                        :
+                        null
+                    }
+                </div>
 
             </div>
         </Modal>

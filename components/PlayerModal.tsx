@@ -14,7 +14,7 @@ import SteamIcon from "./icons/SteamIcon";
 export interface PlayerModalProps
 {
     data?: apiPlayerIdSingle;
-    games?: apiGamesListResponse;
+    games?: apiGamesListResponse[];
     visible: boolean;
     onClose: Function;
 }
@@ -36,7 +36,7 @@ export default function PlayerModal(props: PlayerModalProps)
 
     function getHoursPlayed()
     {
-        let mins = props.games?.games.reduce((a, b) => a + b.playtime_forever, 0);
+        let mins = userGameData?.games.reduce((a, b) => a + b.playtime_forever, 0);
         if (mins !== undefined)
         {
             return Math.round(mins / 60);
@@ -46,8 +46,11 @@ export default function PlayerModal(props: PlayerModalProps)
 
     function getIntensity()
     {
-
+        console.log(props.games)
     }
+
+    const userGameData = props.games?.filter(item => item?.steamid == props.data?.steamid).pop()            
+
 
     return (
         <Modal
@@ -65,7 +68,10 @@ export default function PlayerModal(props: PlayerModalProps)
 
                     <div className="flex justify-between">
                         <div className="flex">
-                            <Image src={props.data?.avatarfull} height={200} width={200} alt="avatar" className="aspect-square rounded-md" />
+                            {props.data ?
+                                <Image src={props.data?.avatarfull ?? ""} height={200} width={200} alt="avatar" className="aspect-square rounded-md" />
+                                : null
+                            }
                             <div className="ml-2 border">
                                 <p className=" text-6xl py-2">{props.data?.personaname}</p>
                                 {props.data?.communityvisibilitystate === 3 ?
@@ -92,22 +98,21 @@ export default function PlayerModal(props: PlayerModalProps)
                                 }
                             </div>
                         </div>
-                        <div className="mr-2">
+                        <div className="mr-4">
                             <a href={props.data?.profileurl} target="_blank">
-                                <button className="fill-white h-8 w-8 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500">
+                                <button className="fill-white h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500">
                                     <SteamIcon size={"100%"} />
                                 </button>
                             </a>
                         </div>
                     </div>
-                    {props.data?.communityvisibilitystate === 3 ?
-
-
+                    {/* <p style={{fontSize: "4px"}} className="">{JSON.stringify(props.games)}</p> */}
+                    {props.data?.communityvisibilitystate === 3 && props.games ?
                         <div>
                             <p className="text-2xl text-right p-2">Most played games</p>
                             <div className="grid grid-cols-2 w-full gap-2 pr-2">
 
-                                {props.games?.games?.sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 10).map((game) =>
+                                {userGameData?.games?.sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 10).map((game) =>
                                 {
                                     return (<GameTile key={game.appid}
                                         data={game} />)
@@ -118,20 +123,18 @@ export default function PlayerModal(props: PlayerModalProps)
                     }
                 </div>
 
-
-                {props.games?.games ?
+                {userGameData?.games ?
                     <div className="border-2 border-green-400">
                         <p className="text-center text-2xl">Intensity<br></br> Score</p>
 
                         <div className="text-center">
-                            <p className="text-blue-200">Total Games: {props.games?.game_count}</p>
+                            <p className="text-blue-200">Total Games: {userGameData?.game_count}</p>
                             <p className="text-blue-200">Hours played: {getHoursPlayed()}</p>
                         </div>
                     </div>
                     :
                     null
                 }
-
             </div>
         </Modal>
     )

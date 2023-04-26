@@ -11,8 +11,9 @@ export interface AvatarProps
 {
     data: apiPlayerIdSingle;
     enabled: boolean;
-    onClose: Function;
     onOpen: Function;
+    onToggle: Function;
+    onDelete: Function;
 }
 
 export default function Avatar(props: AvatarProps)
@@ -22,13 +23,13 @@ export default function Avatar(props: AvatarProps)
 
 
     
-    function hoverIn()
+    function hoverIn(): void
     {
         // console.log("IN");
         setHover(true);
     }
 
-    function hoverOut()
+    function hoverOut(): void
     {
         // console.log("OUT");
         setHover(false);
@@ -46,19 +47,17 @@ export default function Avatar(props: AvatarProps)
         onMouseLeave={hoverOut}
         >
             <div className={avatarSideClass}>
-                <button onClick={()=>console.log("CLICK")} className=" hover:fill-orange-300 fill-white transition-colors">
+                <button onClick={() => props.onToggle()} className=" hover:fill-orange-300 fill-white transition-colors">
                     {props.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 
-                
-
                 </button>
-                <button onClick={()=>console.log("CLICK")} className=" hover:fill-red-500 fill-white transition-colors">
+                <button onClick={() => {props.onDelete()}} className=" hover:fill-red-500 fill-white transition-colors">
                 <DeleteIcon />
                 </button>
 
             </div>
 
-            <div className="w-16 aspect-square p-1 cursor-pointer " onClick={props.onOpen}>
+            <div className="w-16 aspect-square p-1 cursor-pointer " onClick={() => props.onOpen()}>
                 <img src={props.data?.avatarmedium} className="h-full w-full rounded-md" />
             </div>
         </div>

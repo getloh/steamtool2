@@ -248,8 +248,9 @@ export default function UsersMain()
                             key={id.steamid}
                             data={id}
                             enabled={true}
-                            onClose={()=>{console.log("onClose triggered")}}
                             onOpen={() => {setUserModal(userData[index])}}
+                            onToggle={()=>{console.log("Toggle")}}
+                            onDelete={()=>{console.log("Delete")}}
                         />
                         )
                     })}
@@ -269,8 +270,12 @@ export default function UsersMain()
             <PlayerModal 
             visible={userModal?.steamid !== undefined}
             onClose={()=>{setUserModal(undefined)}}
+            // onClose={()=>{console.log(userGameData.filter(item => item?.steamid == userModal?.steamid))}}
+
             data={userModal}
-            games={userGameData.filter(item => item?.steamid == userModal?.steamid)[0]}
+            games={userGameData}
+
+            // games={userGameData.filter(item => item?.steamid == userModal?.steamid)}
             />
 
         </div>

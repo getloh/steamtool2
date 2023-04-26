@@ -6,6 +6,7 @@ import classNames from "classnames";
 import VisibilityIcon from "./icons/VisibilityIcon";
 import VisibilityOffIcon from "./icons/VisibilityOffIcon";
 import DeleteIcon from "./icons/DeleteIcon";
+import CloseIcon from "./icons/CloseIcon";
 
 
 export interface ModalProps
@@ -19,7 +20,7 @@ export default function Modal(props: ModalProps)
 {
 
     const modalStyles = classNames(
-        "fixed top-0 left-0 w-full h-full z-20 border-2 border-green-500 bg-black bg-opacity-70 items-center justify-center transition duration-500",
+        "fixed top-0 left-0 w-full h-full z-20 bg-black bg-opacity-70 items-center justify-center transition duration-500",
         props.visible ? "flex flex-col visible" : "invisible bg-opacity-0",
 
     )
@@ -32,8 +33,8 @@ export default function Modal(props: ModalProps)
     return (
         <div className={modalStyles}
         >
-            <button className="absolute top-0 right-0" onClick={onClose}>
-                <p>Close</p>
+            <button className="absolute top-4 right-4 fill-white" onClick={onClose}>
+                <CloseIcon size={80}/>
             </button>
 
             <div className="h-1/6 w-full"onClick={onClose} id="MODALTOP"/>

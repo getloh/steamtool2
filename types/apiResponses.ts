@@ -1,7 +1,7 @@
 
 //https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.API_KEY}&steamids=${playerid}
 export type apiPlayerIdSingle = {
-    steamid?: string,
+    steamid: string,
     communityvisibilitystate?: number,
     profilestate?: number,
     personaname?: string,
@@ -51,7 +51,7 @@ export type apiGamesList = {
 export type apiGamesListResponse = {
     game_count: number,
     games: apiGameData[],
-    steamid?: number;
+    steamid?: string;
 }
 
 export type apiVanityLookup = {

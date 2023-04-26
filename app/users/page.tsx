@@ -30,15 +30,16 @@ export default function UsersMain()
     /**If the userData state changes,  */
     useEffect(() =>
     {
+        console.log("UserDataState changed " + userData.length)
         if (userData.length == 0)
         {
-            // console.log("no user data yet, skipping..")
+            console.log("no user data yet, skipping..")
             return
         }
         else
         {
             console.log("userData state useffect fired")
-            const idsToFetch = findNewSteamIds(userData, userGameData)
+            const idsToFetch = findNewSteamIds(userData, userGameData)      //! I THINK ITS SOMETHING TO DO WITH THIS
             console.log("I should fetch - " + idsToFetch)
             idsToFetch.map(id =>
             {
@@ -111,6 +112,7 @@ export default function UsersMain()
     // When the userGameData changes (fetch completes), go through the list to general the combined games list
     // This includes adding the userid to each gameobject so we know who owns what
     useEffect(() => {
+        console.log("UserGameData state changed")
         setLoadingGames(true);
         // Set the activegameData state to an array of all the games, 
         // setActiveGameData(userGameData[0].games)
@@ -141,7 +143,7 @@ export default function UsersMain()
 
             })
         })
-        console.log(agd)
+        // console.log(agd)
 
         setActiveGameData(agd)
         setLoadingGames(false);
@@ -149,12 +151,25 @@ export default function UsersMain()
     },[userGameData] )
 
     function testButton(){
-        setUserModal(userData[0])
+        setActiveGameData([]);
+        setUserGameData([]);
+    }
+
+    function deleteUser(steamid : string){
+        let newActiveGameData = activeGameData.filter(agd => false)
+        let newUserGameData = userGameData.filter(ugd => ugd.steamid !== steamid);
+        let newUserData = userData.filter(user => user.steamid !== steamid);
+        // setActiveGameData(newActiveGameData);
+        setUserData(newUserData);
+        // setUserGameData(newUserGameData);
+        setActiveGameData([]);
+        setUserGameData([]);
+
     }
 
     useEffect(()=>{
-        console.log("state was updated!")
-        // console.log(activeGameData)
+        console.log("activeGameData state was updated!")
+        console.log(activeGameData)
     }, [activeGameData])
 
     return (
@@ -178,29 +193,29 @@ export default function UsersMain()
                     {/* <p>Search state = {search}</p> */}
 
                     <div className="h-auto w-auto overflow-clip">
-                        {/* <div className="border-2 border-blue-500">
+                        <div id="USERDATA" className="border-2 border-blue-500">
 
                             <p className="text-xl">UserData state</p>
 
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userData)}
                             </div>
-                        </div> */}
+                        </div>
 
 
-                        <div className="border-2 border-orange-600">
+                        <div id="USERGAMEDATA" className="border-2 border-orange-600">
                             <p className="text-xl">UserGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userGameData)}
                             </div>
                         </div>
 
-                        {/* <div className="border-2 border-red-600">
+                        <div id="ACTIVEGAMEDATA" className="border-2 border-red-600">
                             <p className="text-xl">ActiveGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(activeGameData)}
                             </div>
-                        </div> */}
+                        </div>
 
                         {/* <div className="border-2 border-red-600">
                             <p className="text-xl">UserModal</p>
@@ -250,7 +265,7 @@ export default function UsersMain()
                             enabled={true}
                             onOpen={() => {setUserModal(userData[index])}}
                             onToggle={()=>{console.log("Toggle")}}
-                            onDelete={()=>{console.log("Delete")}}
+                            onDelete={()=>{deleteUser(id.steamid)}}
                         />
                         )
                     })}
@@ -270,12 +285,8 @@ export default function UsersMain()
             <PlayerModal 
             visible={userModal?.steamid !== undefined}
             onClose={()=>{setUserModal(undefined)}}
-            // onClose={()=>{console.log(userGameData.filter(item => item?.steamid == userModal?.steamid))}}
-
             data={userModal}
             games={userGameData}
-
-            // games={userGameData.filter(item => item?.steamid == userModal?.steamid)}
             />
 
         </div>

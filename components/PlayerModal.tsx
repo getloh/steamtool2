@@ -72,7 +72,7 @@ export default function PlayerModal(props: PlayerModalProps)
                                 <Image src={props.data?.avatarfull ?? ""} height={200} width={200} alt="avatar" className="aspect-square rounded-md" />
                                 : null
                             }
-                            <div className="ml-2 border">
+                            <div className="ml-2">
                                 <p className=" text-6xl py-2">{props.data?.personaname}</p>
                                 {props.data?.communityvisibilitystate === 3 ?
                                     <div>

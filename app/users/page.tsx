@@ -10,6 +10,7 @@ import Avatar from '@/components/Avatar';
 import GameTile from '@/components/GameTile';
 import Modal from '@/components/Modal';
 import PlayerModal from '@/components/PlayerModal';
+import LoadingRipple from '@/components/icons/LoadingRipple';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,8 +18,8 @@ export default function UsersMain()
 {
 
     const [userIds, setUserIds] = useState([]);
+    const [firstLoad, setFirstLoad] = useState(false);
     const [hiddenUserIds, setHiddenUserIds] = useState<string[]>([]);         // Used to filter out Ids that we have already fetched
-
     const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);      // Holds user api data
     const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([]);        // An object with userID, and an array of games
     const [search, setSearch] = useState("");   // used only for the search bar
@@ -27,6 +28,11 @@ export default function UsersMain()
     const [activeGameData, setActiveGameData] = useState<apiGameData[]>([]);    // A combined array of games, with additional users property on each game
     const [loadingGames, setLoadingGames] = useState(false);    // TODO: Some sort of loading state?
     const [userModal, setUserModal] = useState<apiPlayerIdSingle>();        // Put API data in here to show the player modal
+
+    //!TODO: If you filter all users, you see the loading circle
+    //!TODO: You can search for and add a user even if they already exist
+    //!TODO: Some sort of clickability on gametiles?
+    //!TODO: Responsive view for avatars
 
     /**If the userData state changes,  */
     useEffect(() =>
@@ -39,9 +45,9 @@ export default function UsersMain()
         }
         else
         {
-            console.log("userData state useffect fired")
-            const idsToFetch = findNewSteamIds(userData, userGameData)      //! I THINK ITS SOMETHING TO DO WITH THIS
-            console.log("I should fetch - " + JSON.stringify(idsToFetch))
+            console.log("userData state useffect fired");
+            const idsToFetch = findNewSteamIds(userData, userGameData);
+            console.log("I should fetch - " + JSON.stringify(idsToFetch));
             idsToFetch.map(id =>
             {
                 if (userGameData.findIndex((gameDataSet) => gameDataSet.steamid == id) !== -1)
@@ -98,6 +104,7 @@ export default function UsersMain()
     async function fetchPlayer()
     {
         setLoadingUser(true);
+        setFirstLoad(true);
         console.log("FETCHPLAYER RUN")
         fetch(`/api/playerid/${search}`)
             .then(res => res.json())
@@ -233,7 +240,7 @@ export default function UsersMain()
 
             <div className="flex justify-between items-center px-10 h-16 bg-sky-950">
                 <h1>Logo</h1>
-                <div className="w-1/4">
+                <div className="w-1/2 lg:w-1/3">
                     <SearchBar
                         value={search}
                         onChange={(text: string) => setSearch(text)}
@@ -242,42 +249,40 @@ export default function UsersMain()
                 </div>
             </div>
 
-            <main className="flex border-2 border-pink-400 min-h-[calc(100vh-4rem)]">
+            <main className="flex min-h-[calc(100vh-4rem)]">
                 <div id="maincontent" className="pr-20 w-full">
 
                     {/* <p>Search state = {search}</p> */}
 
                     <div className="h-auto w-auto overflow-clip">
-                        <div id="USERDATA" className="border-2 border-blue-500">
 
+                        {/* <div id="USERDATA" className="border-2 border-blue-500">
                             <p className="text-xl">UserData state</p>
-
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userData)}
                             </div>
-                        </div>
+                        </div> */}
 
-
-                        <div id="USERGAMEDATA" className="border-2 border-orange-600">
+                        {/* <div id="USERGAMEDATA" className="border-2 border-orange-600">
                             <p className="text-xl">UserGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userGameData)}
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div id="HIDDENUSERS" className="border-2 border-orange-600">
+                        {/* <div id="HIDDENUSERS" className="border-2 border-orange-600">
                             <p className="text-xl">Hiddenusers state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(hiddenUserIds)}
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div id="ACTIVEGAMEDATA" className="border-2 border-red-600">
+                        {/* <div id="ACTIVEGAMEDATA" className="border-2 border-red-600">
                             <p className="text-xl">ActiveGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(activeGameData)}
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* <div className="border-2 border-red-600">
                             <p className="text-xl">UserModal</p>
@@ -286,19 +291,19 @@ export default function UsersMain()
                             </div>
                         </div> */}
 
-                        <div className="border-2 border-yellow-600">
+                        {/* <div className="border-2 border-yellow-600">
                             <p style={{ color: "red" }}>Errors: {error}</p>
                             <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-8 w-8"></div>
 
                             <div style={{ backgroundColor: loadingGames ? "orange" : "lime" }} className="h-8 w-8"></div>
 
-                        </div>
+                        </div> */}
 
-                        <button onClick={testButton} className="px-4 py-2 bg-cyan-600 rounded hover:bg-cyan-800 transition text-cyan-50">
+                        {/* <button onClick={testButton} className="px-4 py-2 bg-cyan-600 rounded hover:bg-cyan-800 transition text-cyan-50">
                             <p>test</p>
-                        </button>
+                        </button> */}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 border-2 border-purple-400 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 m-2 gap-2">
                             {activeGameData
                                 .sort((a, b) => a.name.localeCompare(b.name))
                                 .sort((a, b) => b.users.length - a.users.length)
@@ -316,10 +321,16 @@ export default function UsersMain()
                                     )
                                 })}
                         </div>
+                        {activeGameData.length == 0 && firstLoad ? 
+                            <div className="flex justify-center items-center w-full">
+                                <LoadingRipple />
+                            </div>
+                            :null
+                        }
                     </div>
                 </div>
 
-                <div id="avatararea" className="border-2 border-teal-400 fixed right-0 flex-col flex items-end gap-2">
+                <div id="avatararea" className="fixed right-0 flex-col flex items-end gap-2 mt-2">
                     {userData.map((id, index) =>
                     {
                         return (
@@ -333,9 +344,6 @@ export default function UsersMain()
                             />
                         )
                     })}
-
-
-
 
                 </div>
 

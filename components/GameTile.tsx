@@ -16,7 +16,7 @@ export default function GameTile(props: GameTileProps)
 
 
     return (
-        <div className="p-2 sm:p-4 bg-neutral-950 flex justify-between relative rounded-md hover:bg-sky-950 group">
+        <div className="p-2 sm:p-4 bg-neutral-950 flex justify-between relative rounded-md hover:bg-sky-900 group">
             <div className="flex z-10 items-center">
                 {props.data.img_icon_url !== "" ?
 

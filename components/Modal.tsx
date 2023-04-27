@@ -33,15 +33,15 @@ export default function Modal(props: ModalProps)
     return (
         <div className={modalStyles}
         >
-            <button className="absolute top-4 right-4 fill-white" onClick={onClose}>
-                <CloseIcon size={80}/>
+            <button className="absolute top-1 lg:top-4 right-1 lg:right-4 h-10 xl:h-20 fill-white" onClick={onClose}>
+                <CloseIcon size={"100%"}/>
             </button>
 
-            <div className="h-1/6 w-full"onClick={onClose} id="MODALTOP"/>
+            <div className="h-1 sm:h-1/6 w-full"onClick={onClose} id="MODALTOP"/>
 
             <div className="w-full flex flex-grow justify-center">
                 <div className="flex-grow" onClick={onClose}/>
-                <div className="w-3/4 rounded-md p-2">
+                <div className=" w-[95%] xl:w-3/4 rounded-md p-2">
                     <div className="w-full h-full z-30 rounded-md p-1 bg-neutral-900">
 
                         {props.children}
@@ -50,7 +50,7 @@ export default function Modal(props: ModalProps)
                 <div className="flex-grow" onClick={onClose}/>
             </div>
             
-            <div className="h-1/6 w-full" onClick={onClose} id="MODALBOTTOM"/>
+            <div className="h-1 sm:h-1/6 w-full" onClick={onClose} id="MODALBOTTOM"/>
         </div>
     )
 }

@@ -10,6 +10,7 @@ import Modal from "./Modal";
 import Image from "next/image";
 import GameTile from "./GameTile";
 import SteamIcon from "./icons/SteamIcon";
+import { DateTime } from "luxon";
 
 export interface PlayerModalProps
 {
@@ -22,16 +23,18 @@ export interface PlayerModalProps
 export default function PlayerModal(props: PlayerModalProps)
 {
 
-    function unixToDate(unix: number): Date
+    function unixToDate(unix: number): DateTime
     {
-        let date = new Date(unix * 1000)
+        let date = DateTime.fromSeconds(unix)
         return date
     }
 
-    function dateToYearsAgo(date: Date)
+    function dateToYearsAgo(date: DateTime): DateTime
     {
-        let today = new Date();
-        return (today.getFullYear() - date.getFullYear() + " Years old")
+        let today = DateTime.now();
+        // let diff = today.minus(date)
+        let diff = today.diff(date, ["years"]).toObject()
+        return (Math.floor(diff.years) + " Years ago")
     }
 
     function getHoursPlayed()
@@ -49,7 +52,7 @@ export default function PlayerModal(props: PlayerModalProps)
         console.log(props.games)
     }
 
-    const userGameData = props.games?.filter(item => item?.steamid == props.data?.steamid).pop()            
+    const userGameData = props.games?.filter(item => item?.steamid == props.data?.steamid).pop()
 
 
     return (
@@ -57,30 +60,35 @@ export default function PlayerModal(props: PlayerModalProps)
             visible={props.visible}
             onClose={props.onClose}
         >
-            {/* <div className="bg-white w-full h-full z-30 rounded-md p-2"> */}
-            {/* <button className="w-80 h-80 bg-teal-700" onClick={()=>console.log("TEST")}>
-                    <p>PRESS MEEEE</p>
-                </button> */}
 
-            {/* </div> */}
-            <div className="w-full p-2 h-full flex justify-between">
+            <div className="w-full p-2 h-full flex flex-col sm:flex-row justify-between">
                 <div className="flex-grow">
 
-                    <div className="flex justify-between">
-                        <div className="flex">
-                            {props.data ?
-                                <Image src={props.data?.avatarfull ?? ""} height={200} width={200} alt="avatar" className="aspect-square rounded-md" />
-                                : null
-                            }
-                            <div className="ml-2">
-                                <p className=" text-6xl py-2">{props.data?.personaname}</p>
+                    {/** //! PROFILE AREA */}
+                    <div className="flex justify-between flex-col sm:flex-row">
+                        <div className="flex" >
+                            <div className="flex flex-col justify-between">
+                                {props.data ?
+                                    <div className="h-20 xl:h-40 aspect-square">
+                                        <Image src={props.data?.avatarfull ?? ""} height={200} width={200} alt="avatar" className="rounded-md" />
+                                    </div>
+                                    :
+                                    null
+                                }
+                                <button className="fill-white h-8 w-8 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500 sm:hidden">
+                                    <SteamIcon size={"100%"} />
+                                </button>
+                            </div>
+                            <div className="ml-2 pb-2 border">
+                                <p className="text-3xl xl:text-6xl xl:py-2">{props.data?.personaname}</p>
                                 {props.data?.communityvisibilitystate === 3 ?
                                     <div>
 
-                                        <p className=" text-2xl">{props.data?.realname}</p>
-                                        <p className="">Account Created: {props.data?.timecreated ? unixToDate(props.data.timecreated).toDateString() + " (" + dateToYearsAgo(unixToDate(props.data.timecreated)) + ")" : "X"}</p>
-                                        <p className="1">{props.data?.lastlogoff ? "Last Update: " + unixToDate(props.data.lastlogoff).toDateString() : ""}</p>
-                                        <p className={props.data?.personastate === 1 ? "text-green-500" : "text-neutral-500"}>{props.data?.personastate === 1 ? "Online" : "Offline"}</p>
+                                        <p className="xl:text-2xl">{props.data?.realname}</p>
+                                        <p className="text-xs sm:text-sm xl:text-base">Acc Created: {props.data?.timecreated ? unixToDate(props.data.timecreated).toFormat("d MMM yyyy") + " (" + dateToYearsAgo(unixToDate(props.data.timecreated)) + ")" : "X"}</p>
+                                        <p className="text-xs sm:text-sm xl:text-base">{props.data?.lastlogoff ? "Last Update: " + unixToDate(props.data.lastlogoff).toFormat("dd/MM/yyyy") : ""}</p>
+                                        <p className={props.data?.personastate === 1 ? "text-green-500 text-sm xl:text-base" : "text-neutral-500 text-sm xl:text-base"}>{props.data?.personastate === 1 ? "Online" : "Offline"}</p>
+
                                         <p className="text-2xs">Location Code: {props.data?.loccountrycode ? props.data?.loccountrycode : "Unknown"}</p>
                                         <p className="text-2xs">SteamID: {props.data?.steamid}</p>
                                     </div>
@@ -98,25 +106,28 @@ export default function PlayerModal(props: PlayerModalProps)
                                 }
                             </div>
                         </div>
-                        <div className="mr-4">
+                        <div className="mr-4 flex flex-col items-end justify-between border border-red-800">
                             <a href={props.data?.profileurl} target="_blank">
-                                <button className="fill-white h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500">
+                                <button className="fill-white h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500 hidden sm:block">
                                     <SteamIcon size={"100%"} />
                                 </button>
                             </a>
-                            <button className=" fill-teal-500 h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500" onClick={() => {console.log(props.data)}}>
+                            <p className="text-xl xl:text-2xl text-right p-2 -mb-1">Most played games</p>
+
+                            {/* <button className=" fill-teal-500 h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500" onClick={() => {console.log(props.data)}}>
                                     <p className="">PlayerData</p>
                                 </button>
                             <button className=" fill-red-500 h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500" onClick={() => {console.log(props.games)}}>
                                     <p>gameData</p>
-                                </button>
+                                </button> */}
                         </div>
                     </div>
-                    {/* <p style={{fontSize: "4px"}} className="">{JSON.stringify(props.games)}</p> */}
+
+                    {/** //!GAME ZONE */}
                     {props.data?.communityvisibilitystate === 3 && props.games ?
-                        <div>
-                            <p className="text-2xl text-right p-2">Most played games</p>
-                            <div className="grid grid-cols-2 w-full gap-2 pr-2">
+                        <div className="">
+                            {/* <p className="text-lg xl:text-2xl text-right p-2">Most played games</p> */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-2 pr-2 overflow-y-scroll h-[50vh] xl:h-auto xl:overflow-y-auto">
 
                                 {userGameData?.games?.sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 10).map((game) =>
                                 {
@@ -129,6 +140,7 @@ export default function PlayerModal(props: PlayerModalProps)
                     }
                 </div>
 
+                {/** //! INTENSITY AREA */}
                 {userGameData?.games ?
                     <div className="border-2 border-green-400">
                         <p className="text-center text-2xl">Intensity<br></br> Score</p>

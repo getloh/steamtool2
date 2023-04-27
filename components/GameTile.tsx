@@ -16,7 +16,7 @@ export default function GameTile(props: GameTileProps)
 
 
     return (
-        <div className="p-4 bg-neutral-950 flex justify-between relative rounded-md hover:bg-sky-950 group">
+        <div className="p-2 sm:p-4 bg-neutral-950 flex justify-between relative rounded-md hover:bg-sky-950 group">
             <div className="flex z-10 items-center">
                 {props.data.img_icon_url !== "" ?
 
@@ -26,7 +26,7 @@ export default function GameTile(props: GameTileProps)
                 }
 
                 <div className="flex flex-col justify-center">
-                    <p className={props.data.name.length > 25 ? "text-sm xl:text-base" : "text-md xl:text-lg"}>{props.data.name}</p>
+                    <p className={props.data.name.length > 25 ? "text-xs sm:text-sm xl:text-base" : "text-md xl:text-lg"}>{props.data.name}</p>
                     <p className="text-2xs opacity-40">AppID: {props.data.appid}</p>
                 </div>
             </div>
@@ -54,9 +54,9 @@ export default function GameTile(props: GameTileProps)
                 :
                 <div className="flex justify-end items-end gap-1 absolute bottom-2 right-2 z-0 opacity-80">
                     {props.data.playtime_forever !== 0 ? 
-                    <p className="">{Math.round(props.data.playtime_forever / 60)} Hrs</p>
+                    <p className="text-xs sm:text-base">{Math.round(props.data.playtime_forever / 60)} Hrs</p>
                     :
-                    <p className="">Unplayed</p>
+                    <p className="text-xs sm:text-base">Unplayed</p>
                     }
 
                 </div>

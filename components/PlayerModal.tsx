@@ -66,7 +66,7 @@ export default function PlayerModal(props: PlayerModalProps)
 
                     {/** //! PROFILE AREA */}
                     <div className="flex justify-between flex-col sm:flex-row">
-                        <div className="flex" >
+                        <div className="flex justify-between" >
                             <div className="flex flex-col justify-between">
                                 {props.data ?
                                     <div className="h-20 xl:h-40 aspect-square">
@@ -80,14 +80,17 @@ export default function PlayerModal(props: PlayerModalProps)
                                 </button>
                             </div>
                             <div className="ml-2 pb-2 border">
-                                <p className="text-3xl xl:text-6xl xl:py-2">{props.data?.personaname}</p>
+                                <p className="text-3xl xl:text-6xl xl:py-2 text-right sm:text-left">{props.data?.personaname}</p>
                                 {props.data?.communityvisibilitystate === 3 ?
-                                    <div>
+                                    <div className="text-right sm:text-left">
 
                                         <p className="xl:text-2xl">{props.data?.realname}</p>
-                                        <p className="text-xs sm:text-sm xl:text-base">Acc Created: {props.data?.timecreated ? unixToDate(props.data.timecreated).toFormat("d MMM yyyy") + " (" + dateToYearsAgo(unixToDate(props.data.timecreated)) + ")" : "X"}</p>
+                                        <div className="flex justify-end sm:justify-normal">
+                                        <p className="text-xs sm:text-sm xl:text-base">Created: {props.data?.timecreated ? unixToDate(props.data.timecreated).toFormat("d MMM yyyy") : "X"}</p>
+                                        <p className="pl-1 text-xs sm:text-sm xl:text-base hidden sm:inline">{props.data?.timecreated ? "(" + dateToYearsAgo(unixToDate(props.data.timecreated)) + ")" : "X"}</p>
+                                        </div>
                                         <p className="text-xs sm:text-sm xl:text-base">{props.data?.lastlogoff ? "Last Update: " + unixToDate(props.data.lastlogoff).toFormat("dd/MM/yyyy") : ""}</p>
-                                        <p className={props.data?.personastate === 1 ? "text-green-500 text-sm xl:text-base" : "text-neutral-500 text-sm xl:text-base"}>{props.data?.personastate === 1 ? "Online" : "Offline"}</p>
+                                        <p className={props.data?.personastate === 1 ? "text-green-500 text-xs xl:text-base" : "text-neutral-500 text-xs xl:text-base"}>{props.data?.personastate === 1 ? "Online" : "Offline"}</p>
 
                                         <p className="text-2xs">Location Code: {props.data?.loccountrycode ? props.data?.loccountrycode : "Unknown"}</p>
                                         <p className="text-2xs">SteamID: {props.data?.steamid}</p>
@@ -142,12 +145,16 @@ export default function PlayerModal(props: PlayerModalProps)
 
                 {/** //! INTENSITY AREA */}
                 {userGameData?.games ?
-                    <div className="border-2 border-green-400">
-                        <p className="text-center text-2xl">Intensity<br></br> Score</p>
+                    <div className="border-2 border-green-400 flex justify-between">
+                        <div className="l">
+                            <p className="text-center md:text-2xl">Intensity Score</p>
+                            <div className="text-center">
+                                <p className="text-blue-200 text-xs md:text-base">Total Games: {userGameData?.game_count}</p>
+                                <p className="text-blue-200 text-xs md:text-base">Hours played: {getHoursPlayed()}</p>
+                            </div>
+                        </div>
+                        <div className="r">
 
-                        <div className="text-center">
-                            <p className="text-blue-200">Total Games: {userGameData?.game_count}</p>
-                            <p className="text-blue-200">Hours played: {getHoursPlayed()}</p>
                         </div>
                     </div>
                     :

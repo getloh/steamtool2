@@ -18,7 +18,7 @@ export default function UsersMain()
 {
 
     const [userIds, setUserIds] = useState([]);
-    const [firstLoad, setFirstLoad] = useState(false);
+    const [firstLoadComplete, setFirstLoadComplete] = useState(false);
     const [hiddenUserIds, setHiddenUserIds] = useState<string[]>([]);         // Used to filter out Ids that we have already fetched
     const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);      // Holds user api data
     const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([]);        // An object with userID, and an array of games
@@ -29,7 +29,6 @@ export default function UsersMain()
     const [loadingGames, setLoadingGames] = useState(false);    // TODO: Some sort of loading state?
     const [userModal, setUserModal] = useState<apiPlayerIdSingle>();        // Put API data in here to show the player modal
 
-    //!TODO: If you filter all users, you see the loading circle
     //!TODO: You can search for and add a user even if they already exist
     //!TODO: Some sort of clickability on gametiles?
     //!TODO: Responsive view for avatars
@@ -104,7 +103,7 @@ export default function UsersMain()
     async function fetchPlayer()
     {
         setLoadingUser(true);
-        setFirstLoad(true);
+        setFirstLoadComplete(true);
         console.log("FETCHPLAYER RUN")
         fetch(`/api/playerid/${search}`)
             .then(res => res.json())
@@ -128,7 +127,8 @@ export default function UsersMain()
     useEffect(() =>
     {
         console.log("userGameData state was updated! - Length is " + userGameData.length)
-        if (userGameData.length == 0) {
+        if (userGameData.length == 0)
+        {
             return;
         }
         setLoadingGames(true);
@@ -139,7 +139,8 @@ export default function UsersMain()
 
     }, [userGameData])
 
-    function generateActiveGameDataList(){
+    function generateActiveGameDataList()
+    {
         setLoadingGames(true);
 
         let agd = activeGameData?.slice();
@@ -152,7 +153,8 @@ export default function UsersMain()
                 console.log("user already found! - " + user)
                 return;
             }
-            if (hiddenUserIds.findIndex((steamid) => steamid == user) !== -1){
+            if (hiddenUserIds.findIndex((steamid) => steamid == user) !== -1)
+            {
                 console.log("user is hidden - " + user)
                 return;
             }
@@ -204,16 +206,19 @@ export default function UsersMain()
         setUserGameData([]);
     }
 
-    function toggleHideUser(steamid: string){
-        console.log("Hide user attempted - "+ steamid)
+    function toggleHideUser(steamid: string)
+    {
+        console.log("Hide user attempted - " + steamid)
         setActiveGameData([]);
 
-        if (hiddenUserIds.findIndex((uid)=> uid == steamid) !== -1){
+        if (hiddenUserIds.findIndex((uid) => uid == steamid) !== -1)
+        {
             //User is already hidden, enable the user
-            let removedUserArr = hiddenUserIds.filter((id)=> id !== steamid)
+            let removedUserArr = hiddenUserIds.filter((id) => id !== steamid)
             setHiddenUserIds(removedUserArr)
         }
-        else {
+        else
+        {
             // Lets hide the user
             setHiddenUserIds(oldArray => [...oldArray, steamid]);
         }
@@ -316,16 +321,22 @@ export default function UsersMain()
                                         <GameTile
                                             key={game.appid}
                                             data={game}
-                                            users={(userData.length - hiddenUserIds.length)> 1 ? userArr : undefined}
+                                            users={(userData.length - hiddenUserIds.length) > 1 ? userArr : undefined}
                                         />
                                     )
                                 })}
                         </div>
-                        {activeGameData.length == 0 && firstLoad ? 
+                        {activeGameData.length == 0 && firstLoadComplete && hiddenUserIds.length !== userData.length ?
                             <div className="flex justify-center items-center w-full">
                                 <LoadingRipple />
                             </div>
-                            :null
+                            : null
+                        }
+                        {firstLoadComplete && hiddenUserIds.length == userData.length ?
+                            <div className="flex justify-center items-center w-full">
+                                <p className="w">Hey, it looks like you filtered out all the users. Search for more users, or re-enable the existing ones.</p>
+                            </div>
+                            : null
                         }
                     </div>
                 </div>

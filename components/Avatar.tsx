@@ -41,8 +41,13 @@ export default function Avatar(props: AvatarProps)
         hover ? "w-14": "w-0"
     )
 
+    const avatarImageClass = classNames(
+        "h-full w-full rounded-md filter transition duration-500",
+        props.enabled ? "brightness-100" : "brightness-50"
+    )
+
     return (
-        <div className="flex items-center"
+        <div className="flex items-center "
         onMouseEnter={hoverIn}
         onMouseLeave={hoverOut}
         >
@@ -57,8 +62,8 @@ export default function Avatar(props: AvatarProps)
 
             </div>
 
-            <div className="w-16 aspect-square p-1 cursor-pointer " onClick={() => props.onOpen()}>
-                <img src={props.data?.avatarmedium} className="h-full w-full rounded-md" />
+            <div className="w-16 aspect-square p-1 cursor-pointer" onClick={() => props.onOpen()}>
+                <img src={props.data?.avatarmedium} className={avatarImageClass} />
             </div>
         </div>
     )

@@ -17,15 +17,16 @@ export default function UsersMain()
 {
 
     const [userIds, setUserIds] = useState([]);
-    const [activeUserIds, setActiveUserIds] = useState([]);
-    const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);
+    const [hiddenUserIds, setHiddenUserIds] = useState<string[]>([]);         // Used to filter out Ids that we have already fetched
+
+    const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);      // Holds user api data
     const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([]);        // An object with userID, and an array of games
-    const [search, setSearch] = useState("");
-    const [loadingUser, setLoadingUser] = useState(false);
-    const [error, setError] = useState("");
-    const [activeGameData, setActiveGameData] = useState<apiGameData[]>([]);
-    const [loadingGames, setLoadingGames] = useState(false);
-    const [userModal, setUserModal] = useState<apiPlayerIdSingle>();
+    const [search, setSearch] = useState("");   // used only for the search bar
+    const [loadingUser, setLoadingUser] = useState(false);      // TODO: Some sort of loading state?
+    const [error, setError] = useState("");     // TODO: Some sort of error toast?
+    const [activeGameData, setActiveGameData] = useState<apiGameData[]>([]);    // A combined array of games, with additional users property on each game
+    const [loadingGames, setLoadingGames] = useState(false);    // TODO: Some sort of loading state?
+    const [userModal, setUserModal] = useState<apiPlayerIdSingle>();        // Put API data in here to show the player modal
 
     /**If the userData state changes,  */
     useEffect(() =>
@@ -126,6 +127,14 @@ export default function UsersMain()
         setLoadingGames(true);
         // Set the activegameData state to an array of all the games, 
         // setActiveGameData(userGameData[0].games)
+        generateActiveGameDataList()
+        setLoadingGames(false);
+
+    }, [userGameData])
+
+    function generateActiveGameDataList(){
+        setLoadingGames(true);
+
         let agd = activeGameData?.slice();
         userGameData.map((userGameDataSingle) =>
         {
@@ -136,8 +145,13 @@ export default function UsersMain()
                 console.log("user already found! - " + user)
                 return;
             }
+            if (hiddenUserIds.findIndex((steamid) => steamid == user) !== -1){
+                console.log("user is hidden - " + user)
+                return;
+            }
             userGameDataSingle.games?.map((game) =>
             {
+                console.log("Crunching the list...")
                 // if (agd.findIndex)
                 // console.log(game)
                 let gameObj = game;
@@ -163,7 +177,7 @@ export default function UsersMain()
         setActiveGameData(agd)
         setLoadingGames(false);
 
-    }, [userGameData])
+    }
 
     function testButton()
     {
@@ -183,9 +197,33 @@ export default function UsersMain()
         setUserGameData([]);
     }
 
+    function toggleHideUser(steamid: string){
+        console.log("Hide user attempted - "+ steamid)
+        setActiveGameData([]);
+
+        if (hiddenUserIds.findIndex((uid)=> uid == steamid) !== -1){
+            //User is already hidden, enable the user
+            let removedUserArr = hiddenUserIds.filter((id)=> id !== steamid)
+            setHiddenUserIds(removedUserArr)
+        }
+        else {
+            // Lets hide the user
+            setHiddenUserIds(oldArray => [...oldArray, steamid]);
+        }
+        // setActiveGameData([]);
+        // generateActiveGameDataList();
+    }
+
     useEffect(() =>
     {
-        console.log("activeGameData state was updated!")
+        console.log("hiddenUserIds was changed")
+        generateActiveGameDataList();
+
+    }, [hiddenUserIds])
+
+    useEffect(() =>
+    {
+        console.log("activeGameData state was updated! It now looks like...")
         console.log(activeGameData)
     }, [activeGameData])
 
@@ -224,6 +262,13 @@ export default function UsersMain()
                             <p className="text-xl">UserGameData state</p>
                             <div className="h-40 w-100 overflow-scroll">
                                 {JSON.stringify(userGameData)}
+                            </div>
+                        </div>
+
+                        <div id="HIDDENUSERS" className="border-2 border-orange-600">
+                            <p className="text-xl">Hiddenusers state</p>
+                            <div className="h-40 w-100 overflow-scroll">
+                                {JSON.stringify(hiddenUserIds)}
                             </div>
                         </div>
 
@@ -266,7 +311,7 @@ export default function UsersMain()
                                         <GameTile
                                             key={game.appid}
                                             data={game}
-                                            users={userData.length > 1 ? userArr : undefined}
+                                            users={(userData.length - hiddenUserIds.length)> 1 ? userArr : undefined}
                                         />
                                     )
                                 })}
@@ -281,9 +326,9 @@ export default function UsersMain()
                             <Avatar
                                 key={id.steamid}
                                 data={id}
-                                enabled={true}
+                                enabled={!hiddenUserIds.includes(id.steamid)}
                                 onOpen={() => { setUserModal(userData[index]) }}
-                                onToggle={() => { console.log("Toggle") }}
+                                onToggle={() => { toggleHideUser(id.steamid) }}
                                 onDelete={() => { deleteUser(id.steamid) }}
                             />
                         )

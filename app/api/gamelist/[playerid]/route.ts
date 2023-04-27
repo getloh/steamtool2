@@ -32,7 +32,7 @@ export async function GET(req, { params }: any)
   });
 
   if (data?.response){
-    console.log(data.response)
+    // console.log(data.response)
     return NextResponse.json(data.response)         // Returns data if found, else 404 status code
   }
   else {

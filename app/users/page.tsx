@@ -40,10 +40,11 @@ export default function UsersMain()
         {
             console.log("userData state useffect fired")
             const idsToFetch = findNewSteamIds(userData, userGameData)      //! I THINK ITS SOMETHING TO DO WITH THIS
-            console.log("I should fetch - " + idsToFetch)
+            console.log("I should fetch - " + JSON.stringify(idsToFetch))
             idsToFetch.map(id =>
             {
-                if (userGameData.findIndex((gameDataSet) => gameDataSet.steamid == id) !== -1){
+                if (userGameData.findIndex((gameDataSet) => gameDataSet.steamid == id) !== -1)
+                {
                     console.log("data already found, skipping fetch")
                     return
                 }
@@ -54,15 +55,20 @@ export default function UsersMain()
                         (result: apiGamesListResponse) =>
                         {
                             let newPlayerGameList = result;
-                            newPlayerGameList.steamid = Number(id.steamid);
-
-                            setUserGameData([...userGameData, newPlayerGameList])
-                            setLoadingUser(false);
+                            newPlayerGameList.steamid = id.steamid;
+                            console.log("Successfully recx gamedata for " + id.personaname);
+                            console.log(newPlayerGameList);
+                            // let newData = [...userGameData, newPlayerGameList];
+                            // console.log("userGamedata will be set to:");
+                            // console.log(newData);
+                            setUserGameData(prevData => [...prevData, newPlayerGameList]);
+                            setLoadingUser(false);;
                         },
                         (error) =>
                         {
                             setLoadingUser(false);
-                            setError("Failed to find user")
+                            setError("Failed to find gamedata for user " + id.personaname)
+                            console.log(error);
                         }
                     )
             })
@@ -111,35 +117,44 @@ export default function UsersMain()
 
     // When the userGameData changes (fetch completes), go through the list to general the combined games list
     // This includes adding the userid to each gameobject so we know who owns what
-    useEffect(() => {
-        console.log("UserGameData state changed")
+    useEffect(() =>
+    {
+        console.log("userGameData state was updated! - Length is " + userGameData.length)
+        if (userGameData.length == 0) {
+            return;
+        }
         setLoadingGames(true);
         // Set the activegameData state to an array of all the games, 
         // setActiveGameData(userGameData[0].games)
         let agd = activeGameData?.slice();
-        userGameData.map((userGameDataSingle) => {
+        userGameData.map((userGameDataSingle) =>
+        {
             const user = userGameDataSingle.steamid;
             console.log("Trying to update the activeGameData list with " + user)
-            if (agd.findIndex((singlegame) => singlegame.users?.includes(user)) !== -1){
+            if (agd.findIndex((singlegame) => singlegame.users?.includes(user)) !== -1)
+            {
                 console.log("user already found! - " + user)
                 return;
             }
-            userGameDataSingle.games?.map((game)=>{
+            userGameDataSingle.games?.map((game) =>
+            {
                 // if (agd.findIndex)
                 // console.log(game)
                 let gameObj = game;
-                let gameIndex = agd.findIndex((singlegame)=> singlegame.appid == game.appid);
-                if (gameIndex == -1){
+                let gameIndex = agd.findIndex((singlegame) => singlegame.appid == game.appid);
+                if (gameIndex == -1)
+                {
                     gameObj.users = [user];
                     agd.push(gameObj)
                     // console.log(game + "pushed")
                 }
-                else {
+                else
+                {
                     agd[gameIndex].users = [...agd[gameIndex].users, user];
                 }
-/** for each game
- * if game.appid exists in the activegamedata array's list of objects
- */
+                /** for each game
+                 * if game.appid exists in the activegamedata array's list of objects
+                 */
 
             })
         })
@@ -148,14 +163,16 @@ export default function UsersMain()
         setActiveGameData(agd)
         setLoadingGames(false);
 
-    },[userGameData] )
+    }, [userGameData])
 
-    function testButton(){
+    function testButton()
+    {
         setActiveGameData([]);
         setUserGameData([]);
     }
 
-    function deleteUser(steamid : string){
+    function deleteUser(steamid: string)
+    {
         let newActiveGameData = activeGameData.filter(agd => false)
         let newUserGameData = userGameData.filter(ugd => ugd.steamid !== steamid);
         let newUserData = userData.filter(user => user.steamid !== steamid);
@@ -164,10 +181,10 @@ export default function UsersMain()
         // setUserGameData(newUserGameData);
         setActiveGameData([]);
         setUserGameData([]);
-
     }
 
-    useEffect(()=>{
+    useEffect(() =>
+    {
         console.log("activeGameData state was updated!")
         console.log(activeGameData)
     }, [activeGameData])
@@ -238,59 +255,61 @@ export default function UsersMain()
 
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 border-2 border-purple-400 gap-4">
                             {activeGameData
-                            .sort((a,b)=> a.name.localeCompare(b.name))
-                            .sort((a, b)=> b.users.length - a.users.length)
-                            .map(game=> {
-                                const userArr: apiPlayerIdSingle[] = [];
-                                game.users?.map((user)=> userArr.push(userData.find(element => element.steamid == user )) )
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .sort((a, b) => b.users.length - a.users.length)
+                                .map(game =>
+                                {
+                                    const userArr: apiPlayerIdSingle[] = [];
+                                    game.users?.map((user) => userArr.push(userData.find(element => element.steamid == user)))
 
-                                return(
-                                    <GameTile 
-                                        key={game.appid}
-                                        data={game}
-                                        users={userData.length > 1 ? userArr : undefined}
-                                    />
-                                )
-                            })}
+                                    return (
+                                        <GameTile
+                                            key={game.appid}
+                                            data={game}
+                                            users={userData.length > 1 ? userArr : undefined}
+                                        />
+                                    )
+                                })}
                         </div>
                     </div>
                 </div>
 
                 <div id="avatararea" className="border-2 border-teal-400 fixed right-0 flex-col flex items-end gap-2">
-                    {userData.map((id, index)=> {
+                    {userData.map((id, index) =>
+                    {
                         return (
-                        <Avatar 
-                            key={id.steamid}
-                            data={id}
-                            enabled={true}
-                            onOpen={() => {setUserModal(userData[index])}}
-                            onToggle={()=>{console.log("Toggle")}}
-                            onDelete={()=>{deleteUser(id.steamid)}}
-                        />
+                            <Avatar
+                                key={id.steamid}
+                                data={id}
+                                enabled={true}
+                                onOpen={() => { setUserModal(userData[index]) }}
+                                onToggle={() => { console.log("Toggle") }}
+                                onDelete={() => { deleteUser(id.steamid) }}
+                            />
                         )
                     })}
 
-                
 
-                    
+
+
                 </div>
 
             </main>
-                                    {/* 
+            {/* 
                 Sample Player IDs
                 76561197968130805 
                 https://steamcommunity.com/profiles/76561198068117347/
                 76561197967241237
             */}
-            <PlayerModal 
-            visible={userModal?.steamid !== undefined}
-            onClose={()=>{setUserModal(undefined)}}
-            data={userModal}
-            games={userGameData}
+            <PlayerModal
+                visible={userModal?.steamid !== undefined}
+                onClose={() => { setUserModal(undefined) }}
+                data={userModal}
+                games={userGameData}
             />
 
         </div>
 
-        
+
     )
 }

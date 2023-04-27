@@ -57,7 +57,7 @@ export async function GET(req, { params }: any)
   });
 
   if (data.response){
-    console.log(data.response.players[0])
+    // console.log(data.response.players[0])
     return NextResponse.json(data.response.players[0])         // Returns data if found, else 404 status code
   }
   else {

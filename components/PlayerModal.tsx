@@ -11,6 +11,7 @@ import Image from "next/image";
 import GameTile from "./GameTile";
 import SteamIcon from "./icons/SteamIcon";
 import { DateTime } from "luxon";
+import { Button } from "./Button";
 
 export interface PlayerModalProps
 {
@@ -86,8 +87,8 @@ export default function PlayerModal(props: PlayerModalProps)
 
                                         <p className="xl:text-2xl">{props.data?.realname}</p>
                                         <div className="flex justify-end sm:justify-normal">
-                                        <p className="text-xs sm:text-sm xl:text-base">Created: {props.data?.timecreated ? unixToDate(props.data.timecreated).toFormat("d MMM yyyy") : "X"}</p>
-                                        <p className="pl-1 text-xs sm:text-sm xl:text-base hidden sm:inline">{props.data?.timecreated ? "(" + dateToYearsAgo(unixToDate(props.data.timecreated)) + ")" : "X"}</p>
+                                            <p className="text-xs sm:text-sm xl:text-base">Created: {props.data?.timecreated ? unixToDate(props.data.timecreated).toFormat("d MMM yyyy") : "X"}</p>
+                                            <p className="pl-1 text-xs sm:text-sm xl:text-base hidden sm:inline">{props.data?.timecreated ? "(" + dateToYearsAgo(unixToDate(props.data.timecreated)) + ")" : "X"}</p>
                                         </div>
                                         <p className="text-xs sm:text-sm xl:text-base">{props.data?.lastlogoff ? "Last Update: " + unixToDate(props.data.lastlogoff).toFormat("dd/MM/yyyy") : ""}</p>
                                         <p className={props.data?.personastate === 1 ? "text-green-500 text-xs xl:text-base" : "text-neutral-500 text-xs xl:text-base"}>{props.data?.personastate === 1 ? "Online" : "Offline"}</p>
@@ -115,7 +116,11 @@ export default function PlayerModal(props: PlayerModalProps)
                                     <SteamIcon size={"100%"} />
                                 </button>
                             </a>
-                            <p className="text-xl xl:text-2xl text-right p-2 -mb-1">Most played games</p>
+                            {props.data?.communityvisibilitystate === 3 && userGameData.games ?
+
+                                <p className="text-xl xl:text-2xl text-right p-2 -mb-1">Most played games</p>
+                                : null
+                            }
 
                             {/* <button className=" fill-teal-500 h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500" onClick={() => {console.log(props.data)}}>
                                     <p className="">PlayerData</p>
@@ -127,7 +132,7 @@ export default function PlayerModal(props: PlayerModalProps)
                     </div>
 
                     {/** //!GAME ZONE */}
-                    {props.data?.communityvisibilitystate === 3 && props.games ?
+                    {props.data?.communityvisibilitystate === 3 && userGameData.games ?
                         <div className="">
                             {/* <p className="text-lg xl:text-2xl text-right p-2">Most played games</p> */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-2 pr-2 overflow-y-scroll h-[50vh] xl:h-auto xl:overflow-y-auto">
@@ -139,7 +144,22 @@ export default function PlayerModal(props: PlayerModalProps)
                                 })}
                             </div>
                         </div>
-                        : null
+                        :
+                        <div className="flex justify-center items-center flex-col pt-8">
+                            <p className="font-bold">Unable to find game information for this account</p>
+                            <p>Account may have no games, or may be set to limited privacy</p>
+                            <p>If this is your account, review your privacy settings</p>
+
+                            {props.data?.communityvisibilitystate === 3 ?
+                                <a href="https://help.steampowered.com/en/faqs/view/588C-C67D-0251-C276" target="_blank" >
+                                    <Button>
+                                        Steam FAQ
+                                    </Button>
+                                </a>
+                                :
+                                null
+                            }
+                        </div>
                     }
                 </div>
 

@@ -32,6 +32,7 @@ export default function UsersMain()
     //!TODO: You can search for and add a user even if they already exist
     //!TODO: Some sort of clickability on gametiles?
     //!TODO: Responsive view for avatars
+    //!TODO: Avatar view button styling when it's disabled
 
     /**If the userData state changes,  */
     useEffect(() =>
@@ -103,7 +104,6 @@ export default function UsersMain()
     async function fetchPlayer()
     {
         setLoadingUser(true);
-        setFirstLoadComplete(true);
         console.log("FETCHPLAYER RUN")
         fetch(`/api/playerid/${search}`)
             .then(res => res.json())
@@ -136,7 +136,7 @@ export default function UsersMain()
         // setActiveGameData(userGameData[0].games)
         generateActiveGameDataList()
         setLoadingGames(false);
-
+        setFirstLoadComplete(true);
     }, [userGameData])
 
     function generateActiveGameDataList()
@@ -185,7 +185,6 @@ export default function UsersMain()
 
         setActiveGameData(agd)
         setLoadingGames(false);
-
     }
 
     function testButton()
@@ -326,7 +325,7 @@ export default function UsersMain()
                                     )
                                 })}
                         </div>
-                        {activeGameData.length == 0 && firstLoadComplete && hiddenUserIds.length !== userData.length ?
+                        {activeGameData.length == 0 && userData.length > 0 && hiddenUserIds.length !== userData.length ?
                             <div className="flex justify-center items-center w-full">
                                 <LoadingRipple />
                             </div>

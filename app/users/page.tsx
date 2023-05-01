@@ -253,8 +253,8 @@ export default function UsersMain()
                 </div>
             </div>
 
-            <main className="flex min-h-[calc(100vh-4rem)]">
-                <div id="maincontent" className="pr-20 w-full">
+            <main className="flex max-h-[calc(100vh-4rem)]">
+                <div id="maincontent" className="pr-0 w-full md:pr-20">
 
                     {/* <p>Search state = {search}</p> */}
 
@@ -307,7 +307,7 @@ export default function UsersMain()
                             <p>test</p>
                         </button> */}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 m-2 gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 m-2 gap-2 mr-4 md:mr-0">
                             {activeGameData
                                 .sort((a, b) => a.name.localeCompare(b.name))
                                 .sort((a, b) => b.users.length - a.users.length)
@@ -340,7 +340,9 @@ export default function UsersMain()
                     </div>
                 </div>
 
-                <div id="avatararea" className="fixed right-0 flex-col flex items-end gap-2 mt-2">
+                <div id="avatararea" className="fixed right-0 flex-col flex items-end gap-2 mt-2 md:hidden"
+                    //This is the avatar container for SMALL DEVICES
+                >
                     {userData.map((id, index) =>
                     {
                         return (
@@ -354,7 +356,24 @@ export default function UsersMain()
                             />
                         )
                     })}
+                </div>
 
+                <div id="avatararea" className="fixed right-0 flex-col items-end gap-2 mt-2 hidden md:flex md:border-2 border-red-600"
+                    //Avatar area for MD devices
+                >
+                    {userData.map((id, index) =>
+                    {
+                        return (
+                            <Avatar
+                                key={id.steamid}
+                                data={id}
+                                enabled={!hiddenUserIds.includes(id.steamid)}
+                                onOpen={() => { setUserModal(userData[index]) }}
+                                onToggle={() => { toggleHideUser(id.steamid) }}
+                                onDelete={() => { deleteUser(id.steamid) }}
+                            />
+                        )
+                    })}
                 </div>
 
             </main>

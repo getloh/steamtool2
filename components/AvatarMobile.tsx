@@ -47,22 +47,20 @@ export default function AvatarMobile(props: AvatarMobileProps)
     )
 
     return (
-        <div className="flex items-center "
-        onMouseEnter={hoverIn}
-        onMouseLeave={hoverOut}
+        <div className="flex flex-col border items-center"
         >
-            <div className={AvatarMobileSideClass}>
-                <button onClick={() => props.onToggle()} className=" hover:fill-orange-300 fill-white transition-colors">
+            <div className="">
+                <button onClick={() => props.onToggle()} className=" hover:fill-orange-300 fill-white transition-colors border">
                     {props.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 
                 </button>
-                <button onClick={() => {props.onDelete()}} className=" hover:fill-red-500 fill-white transition-colors">
+                <button onClick={() => {props.onDelete()}} className=" hover:fill-red-500 fill-white transition-colors border">
                 <DeleteIcon />
                 </button>
 
             </div>
 
-            <div className="w-16 aspect-square p-1 cursor-pointer" onClick={() => props.onOpen()}>
+            <div className="w-16 aspect-square p-1 cursor-pointer pt-0" onClick={() => props.onOpen()}>
                 <img src={props.data?.avatarmedium} className={AvatarMobileImageClass} />
             </div>
         </div>

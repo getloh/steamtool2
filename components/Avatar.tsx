@@ -36,7 +36,7 @@ export default function Avatar(props: AvatarProps)
     }
 
     const avatarSideClass = classNames(
-        "transition-all bg-neutral-900 overflow-hidden flex flex-column items-center h-8 rounded-l-md bg-opacity-80 pl-1",
+        "transition-all bg-neutral-900 overflow-hidden flex flex-column items-center h-10 rounded-l-md bg-opacity-80 pl-1",
         // hover ? "block" : "hidden",
         hover ? "w-14": "w-0"
     )

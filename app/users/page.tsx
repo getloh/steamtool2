@@ -240,7 +240,7 @@ export default function UsersMain()
     }, [activeGameData])
 
     return (
-        <div className="min-h-screen bg-neutral-900 text-neutral-300 w-screen">
+        <div className=" bg-neutral-900 text-neutral-300 w-screen">
 
 
             <div className="flex justify-between items-center px-10 h-16 bg-sky-950">
@@ -308,7 +308,7 @@ export default function UsersMain()
                             <p>test</p>
                         </button> */}
 
-                        <div className="grid grid-cols-1 m-2 gap-2  h-[calc(100vh-12rem)] overflow-y-scroll pr-2
+                        <div className="grid grid-cols-1 m-2 gap-2  h-[calc(100vh-12rem)] overflow-auto pr-2
                         md:grid-cols-2 xl:grid-cols-3 md:mr-0 md:h-auto md:overflow-auto md:pr-0">
                             {activeGameData
                                 .sort((a, b) => a.name.localeCompare(b.name))
@@ -342,7 +342,7 @@ export default function UsersMain()
                     </div>
                 </div>
 
-                <div id="avatararea" className="flex items-center gap-3 mt-2 md:hidden justify-center"
+                <div id="avatararea" className="flex items-center gap-3 mt-2 md:hidden overflow-auto justify-between px-4"
                 //This is the avatar container for SMALL DEVICES
                 >
                     {userData.map((id, index) =>
@@ -360,7 +360,7 @@ export default function UsersMain()
                     })}
                 </div>
 
-                <div id="avatararea" className="fixed right-0 flex-col items-end gap-2 mt-2 hidden md:flex md:border-2 border-red-600"
+                <div id="avatararea" className="fixed right-0 flex-col items-end gap-2 mt-2 hidden md:flex "
                 //Avatar area for >MD devices
                 >
                     {userData.map((id, index) =>

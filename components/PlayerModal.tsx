@@ -30,11 +30,12 @@ export default function PlayerModal(props: PlayerModalProps)
         return date
     }
 
-    function dateToYearsAgo(date: DateTime): DateTime
+    function dateToYearsAgo(date: DateTime): string
     {
         let today = DateTime.now();
         // let diff = today.minus(date)
         let diff = today.diff(date, ["years"]).toObject()
+        //@ts-ignore
         return (Math.floor(diff.years) + " Years ago")
     }
 
@@ -80,7 +81,7 @@ export default function PlayerModal(props: PlayerModalProps)
                                     <SteamIcon size={"100%"} />
                                 </button>
                             </div>
-                            <div className="ml-2 pb-2 border">
+                            <div className="ml-2 pb-2">
                                 <p className="text-3xl xl:text-6xl xl:py-2 text-right sm:text-left">{props.data?.personaname}</p>
                                 {props.data?.communityvisibilitystate === 3 ?
                                     <div className="text-right sm:text-left">
@@ -110,7 +111,7 @@ export default function PlayerModal(props: PlayerModalProps)
                                 }
                             </div>
                         </div>
-                        <div className="mr-4 flex flex-col items-end justify-between border border-red-800">
+                        <div className="mr-4 flex flex-col items-end justify-between">
                             <a href={props.data?.profileurl} target="_blank">
                                 <button className="fill-white h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500 hidden sm:block">
                                     <SteamIcon size={"100%"} />

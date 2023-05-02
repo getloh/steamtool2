@@ -31,9 +31,9 @@ export default function GameTile(props: GameTileProps)
                 </div>
             </div>
 
-            <div className="-mt-2 -mr-2 ml-6 ">
+            <div className="-mt-1 md:-mt-2 md:-mr-2 ml-6 ">
                 <a href={"https://store.steampowered.com/app/" + props.data.appid} target="_blank">
-                    <button className="fill-white opacity-0 hover:!opacity-100 hover:fill-white h-6 w-6 overflow-hidden object-contain group-hover:opacity-20">
+                    <button className="fill-white opacity-0 hover:!opacity-100 hover:fill-white h-4 w-4 md:h-6 md:w-6 overflow-hidden object-contain group-hover:opacity-20">
                         <SteamIcon size={"100%"} />
                     </button>
                 </a>
@@ -46,7 +46,7 @@ export default function GameTile(props: GameTileProps)
                     {props.users?.map((user) =>
                     {
                         return (
-                            <img className="h-6 w-6 rounded-md" src={user.avatar} key={user.steamid} />
+                            <img className="h-6 w-6 rounded-md filter brightness-75" src={user.avatar} key={user.steamid} />
                         )
                     })}
                 </div>

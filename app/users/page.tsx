@@ -327,7 +327,7 @@ export default function UsersMain()
                                     )
                                 })}
                         </div>
-                        {activeGameData.length == 0 && userData.length > 0 && hiddenUserIds.length !== userData.length ?
+                        {activeGameData.length == 0 && userData.length > 0 && hiddenUserIds.length !== userData.length?
                             <div className="flex justify-center items-center w-full">
                                 <LoadingRipple />
                             </div>
@@ -342,8 +342,8 @@ export default function UsersMain()
                     </div>
                 </div>
 
-                <div id="avatararea" className="flex-col flex items-center gap-2 mt-2 md:hidden"
-                    //This is the avatar container for SMALL DEVICES
+                <div id="avatararea" className="flex items-center gap-3 mt-2 md:hidden justify-center"
+                //This is the avatar container for SMALL DEVICES
                 >
                     {userData.map((id, index) =>
                     {
@@ -361,7 +361,7 @@ export default function UsersMain()
                 </div>
 
                 <div id="avatararea" className="fixed right-0 flex-col items-end gap-2 mt-2 hidden md:flex md:border-2 border-red-600"
-                    //Avatar area for MD devices
+                //Avatar area for >MD devices
                 >
                     {userData.map((id, index) =>
                     {

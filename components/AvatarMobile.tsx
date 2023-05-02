@@ -47,14 +47,14 @@ export default function AvatarMobile(props: AvatarMobileProps)
     )
 
     return (
-        <div className="flex flex-col border items-center"
+        <div className="flex flex-col items-center"
         >
             <div className="">
-                <button onClick={() => props.onToggle()} className=" hover:fill-orange-300 fill-white transition-colors border">
+                <button onClick={() => props.onToggle()} className=" hover:fill-orange-300 fill-white transition-colors">
                     {props.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 
                 </button>
-                <button onClick={() => {props.onDelete()}} className=" hover:fill-red-500 fill-white transition-colors border">
+                <button onClick={() => {props.onDelete()}} className=" hover:fill-red-500 fill-white transition-colors">
                 <DeleteIcon />
                 </button>
 

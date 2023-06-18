@@ -20,9 +20,8 @@ export default function Modal(props: ModalProps)
 {
 
     const modalStyles = classNames(
-        "fixed top-0 left-0 w-full h-full z-20 bg-black bg-opacity-70 items-center justify-center transition duration-500",
-        props.visible ? "flex flex-col visible" : "invisible bg-opacity-0",
-
+        "fixed top-0 left-0 w-full h-full z-20 bg-black bg-opacity-70 items-center justify-center transition duration-500 backdrop-blur-sm opacity-0",
+        props.visible ? "flex flex-col visible opacity-100" : "invisible bg-opacity-0",
     )
 
     function onClose()

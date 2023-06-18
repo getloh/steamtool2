@@ -74,7 +74,7 @@ export default function PlayerModal(props: PlayerModalProps)
             onClose={props.onClose}
         >
 
-            <div className="w-full p-2 h-full flex flex-col  justify-between">
+            <div className="w-full p-2 h-full flex flex-col justify-between">
                 <div className="">
 
                     {/** //! PROFILE AREA */}

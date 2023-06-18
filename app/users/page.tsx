@@ -342,7 +342,7 @@ export default function UsersMain()
                     </div>
                 </div>
 
-                <div id="avatararea" className="flex items-center gap-3 mt-2 md:hidden overflow-auto justify-between px-4"
+                <div id="avatararea" className={`flex items-center gap-3 mt-2 md:hidden overflow-auto px-4 ${userData.length > 4 ? "justify-between" : " justify-center"}`}
                 //This is the avatar container for SMALL DEVICES
                 >
                     {userData.map((id, index) =>

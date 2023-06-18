@@ -12,6 +12,7 @@ import Modal from '@/components/Modal';
 import PlayerModal from '@/components/PlayerModal';
 import LoadingRipple from '@/components/icons/LoadingRipple';
 import AvatarMobile from '@/components/AvatarMobile';
+import Logo from '@/components/Logo';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -242,7 +243,7 @@ export default function UsersMain()
 
 
             <div className="flex justify-between items-center px-4 md:px-10 h-16 bg-sky-950">
-                <h1>Logo</h1>
+                <Logo />
                 <div className="w-2/3 sm:w-1/2 lg:w-1/3 2xl:w-1/4">
                     <SearchBar
                         value={search}

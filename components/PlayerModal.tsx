@@ -12,6 +12,7 @@ import GameTile from "./GameTile";
 import SteamIcon from "./icons/SteamIcon";
 import { DateTime } from "luxon";
 import { Button } from "./Button";
+import IntensityMeter from "./IntensityMeter";
 
 export interface PlayerModalProps
 {
@@ -49,9 +50,19 @@ export default function PlayerModal(props: PlayerModalProps)
         return "No Data"
     }
 
-    function getIntensity()
+    function getIntensity(): JSX.Element
     {
+        let hoursPlayed = getHoursPlayed();
         console.log(props.games)
+        if (hoursPlayed !== "No Data"){
+            let hourPoints = Number(hoursPlayed) / 166;
+            let gamePoints = Number(userGameData?.game_count) / 31
+
+            return (
+                <IntensityMeter value={hourPoints + gamePoints}/>
+            )
+        }
+        return <div></div>
     }
 
     const userGameData = props.games?.filter(item => item?.steamid == props.data?.steamid).pop()
@@ -63,8 +74,8 @@ export default function PlayerModal(props: PlayerModalProps)
             onClose={props.onClose}
         >
 
-            <div className="w-full p-2 h-full flex flex-col sm:flex-row justify-between">
-                <div className="flex-grow">
+            <div className="w-full p-2 h-full flex flex-col  justify-between">
+                <div className="">
 
                     {/** //! PROFILE AREA */}
                     <div className="flex justify-between flex-col sm:flex-row">
@@ -134,9 +145,9 @@ export default function PlayerModal(props: PlayerModalProps)
 
                     {/** //!GAME ZONE */}
                     {props.data?.communityvisibilitystate === 3 && userGameData.games ?
-                        <div className="">
+                        <div className="h-[55vh]">
                             {/* <p className="text-lg xl:text-2xl text-right p-2">Most played games</p> */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-2 pr-2 overflow-y-scroll h-[50vh] xl:h-auto xl:overflow-y-auto">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-2 pr-2 overflow-y-scroll h-full xl:h-auto xl:overflow-y-auto">
 
                                 {userGameData?.games?.sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 10).map((game) =>
                                 {
@@ -166,17 +177,21 @@ export default function PlayerModal(props: PlayerModalProps)
 
                 {/** //! INTENSITY AREA */}
                 {userGameData?.games ?
-                    <div className="border-2 border-green-400 flex justify-between">
-                        <div className="l">
-                            <p className="text-center md:text-2xl">Intensity Score</p>
-                            <div className="text-center">
-                                <p className="text-blue-200 text-xs md:text-base">Total Games: {userGameData?.game_count}</p>
-                                <p className="text-blue-200 text-xs md:text-base">Hours played: {getHoursPlayed()}</p>
-                            </div>
-                        </div>
-                        <div className="r">
+                    <div className=" flex justify-between items-center">
+                        {/* <div className="l"> */}
+                        {/* <div className="flex gap-2">
 
-                        </div>
+                            <p className="text-center md:text-2xl">Intensity Level</p>
+                            <IntensityMeter value={getIntensity()}/>
+                        </div> */}
+                        {getIntensity()}
+                            <div className="text-end">
+                                <p className="text-blue-200 text-xs md:text-lg">Total Games: {userGameData?.game_count}</p>
+                                <p className="text-blue-200 text-xs md:text-lg">Hours played: {getHoursPlayed()}</p>
+                            </div>
+                        {/* </div> */}
+                        {/* <div id="r" className="flex justify-end h-full mt-4">
+                        </div> */}
                     </div>
                     :
                     null

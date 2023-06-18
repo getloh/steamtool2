@@ -32,8 +32,6 @@ export default function UsersMain()
 
     //!TODO: You can search for and add a user even if they already exist
     //!TODO: Some sort of clickability on gametiles?
-    //!TODO: Responsive view for avatars
-    //!TODO: Avatar view button styling when it's disabled
 
     /**If the userData state changes,  */
     useEffect(() =>
@@ -243,9 +241,9 @@ export default function UsersMain()
         <div className=" bg-neutral-900 text-neutral-300 w-screen">
 
 
-            <div className="flex justify-between items-center px-10 h-16 bg-sky-950">
+            <div className="flex justify-between items-center px-4 md:px-10 h-16 bg-sky-950">
                 <h1>Logo</h1>
-                <div className="w-1/2 lg:w-1/3">
+                <div className="w-2/3 sm:w-1/2 lg:w-1/3 2xl:w-1/4">
                     <SearchBar
                         value={search}
                         onChange={(text: string) => setSearch(text)}

@@ -45,4 +45,4 @@ Responsive mobile views
 ![https://github.com/getloh/steamtool2/blob/main/documentation/steamtool2-mobile.png?raw=true](https://github.com/getloh/steamtool2/blob/main/documentation/steamtool2-mobile.png?raw=true)
 
 ## Video
-![https://github.com/getloh/steamtool2/blob/main/documentation/steamtool2-video.mp4?raw=true](https://github.com/getloh/steamtool2/blob/main/documentation/steamtool2-video.mp4?raw=true)
+![Download link](https://github.com/getloh/steamtool2/blob/main/documentation/steamtool2-video.mp4?raw=true)

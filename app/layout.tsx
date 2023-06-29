@@ -1,5 +1,6 @@
 import localFont from 'next/font/local'
 import './globals.css'
+import { Toaster } from 'react-hot-toast'
 
 const poppins = localFont({
   src: [
@@ -35,7 +36,37 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="">
-      <body className={`overflow-x-hidden ${poppins.variable} font-sans`}>{children}</body>
+      <body className={`overflow-x-hidden ${poppins.variable} font-sans`}>
+        <Toaster 
+        position="bottom-right"
+        reverseOrder={false}
+                gutter={8}
+                containerClassName=""
+                containerStyle={{}}
+                toastOptions={{
+                    // Define default options
+                    className: '',
+                    duration: 5000,
+                    style: {
+                        background: '#363636',
+                        color: '#fff',
+                    },
+
+                    // Default options for specific types
+                    success: {
+                        style: {
+                            background: 'rgb(8, 47, 73)',
+                          },
+                    },
+                    error: {
+                        style: {
+                            background: '#4f1919',
+                          },
+                    },
+                }}
+        />
+        {children}
+        </body>
     </html>
   )
 }

@@ -1,12 +1,12 @@
-
+"use client"
+import Router from 'next/router'
 
 export default function Logo()
 {
 
     return (
         <>
-
-            <div className="relative flex items-end group transition">
+            <div className="relative flex items-end group transition" onClick={()=>{window.location.reload();}}>
                 <svg className="opacity-100 brightness-50"
                     xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 233 233" height="40" width="40" >
                     <defs>

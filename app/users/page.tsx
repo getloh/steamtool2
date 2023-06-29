@@ -13,6 +13,7 @@ import PlayerModal from '@/components/PlayerModal';
 import LoadingRipple from '@/components/icons/LoadingRipple';
 import AvatarMobile from '@/components/AvatarMobile';
 import Logo from '@/components/Logo';
+import { Button } from '@/components/Button';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -254,61 +255,33 @@ export default function UsersMain()
             </div>
 
             <main className="flex min-h-[calc(100vh-4rem)] flex-col">
-                <div id="maincontent" className="pr-0 w-full md:pr-20">
+                <div id="maincontent" className="pr-0 w-full md:pr-20 relative">
 
-                    {/* <p>Search state = {search}</p> */}
 
-                    <div className="h-auto w-auto overflow-clip ">
-
-                        {/* <div id="USERDATA" className="border-2 border-blue-500">
-                            <p className="text-xl">UserData state</p>
-                            <div className="h-40 w-100 overflow-scroll">
-                                {JSON.stringify(userData)}
+                    <div className="h-auto w-auto overflow-clip">
+                        {activeGameData.length == 0 && userData.length > 0 && hiddenUserIds.length !== userData.length ?
+                            //? LOADING STATE
+                            <div className="flex justify-center items-center w-full pt-10 absolute">
+                                <LoadingRipple />
                             </div>
-                        </div> */}
-
-                        {/* <div id="USERGAMEDATA" className="border-2 border-orange-600">
-                            <p className="text-xl">UserGameData state</p>
-                            <div className="h-40 w-100 overflow-scroll">
-                                {JSON.stringify(userGameData)}
+                            : null
+                        }
+                        {firstLoadComplete && hiddenUserIds.length == userData.length ?
+                            //? ALL USERS FILTERED OUT DESKTOP
+                            <div className="hidden md:flex justify-center items-center p-6 text-center">
+                                <p className="w">Hey, it looks like you filtered out all the users. Search for more users, or reenable the existing ones.</p>
                             </div>
-                        </div> */}
-
-                        {/* <div id="HIDDENUSERS" className="border-2 border-orange-600">
-                            <p className="text-xl">Hiddenusers state</p>
-                            <div className="h-40 w-100 overflow-scroll">
-                                {JSON.stringify(hiddenUserIds)}
-                            </div>
-                        </div> */}
-
-                        {/* <div id="ACTIVEGAMEDATA" className="border-2 border-red-600">
-                            <p className="text-xl">ActiveGameData state</p>
-                            <div className="h-40 w-100 overflow-scroll">
-                                {JSON.stringify(activeGameData)}
-                            </div>
-                        </div> */}
-
-                        {/* <div className="border-2 border-red-600">
-                            <p className="text-xl">UserModal</p>
-                            <div className="h-40 w-100 overflow-scroll">
-                                {JSON.stringify(userModal)}
-                            </div>
-                        </div> */}
-
-                        {/* <div className="border-2 border-yellow-600">
-                            <p style={{ color: "red" }}>Errors: {error}</p>
-                            <div style={{ backgroundColor: loadingUser ? "orange" : "lime" }} className="h-8 w-8"></div>
-
-                            <div style={{ backgroundColor: loadingGames ? "orange" : "lime" }} className="h-8 w-8"></div>
-
-                        </div> */}
-
-                        {/* <button onClick={testButton} className="px-4 py-2 bg-cyan-600 rounded hover:bg-cyan-800 transition text-cyan-50">
-                            <p>test</p>
-                        </button> */}
-
+                            : null
+                        }
                         <div className="grid grid-cols-1 m-2 gap-2  h-[calc(100vh-12rem)] overflow-auto pr-2
                         md:grid-cols-2 xl:grid-cols-3 md:mr-0 md:h-auto md:overflow-auto md:pr-0">
+                        {firstLoadComplete && hiddenUserIds.length == userData.length ?
+                            //? ALL USERS FILTERED OUT MOBILE
+                            <div className="md:hidden flex justify-center items-center p-6 text-center">
+                                <p className="w">Hey, it looks like you filtered out all the users. Search for more users, or reenable the existing ones.</p>
+                            </div>
+                            : null
+                        }
                             {activeGameData
                                 .sort((a, b) => a.name.localeCompare(b.name))
                                 .sort((a, b) => b.users.length - a.users.length)
@@ -326,15 +299,34 @@ export default function UsersMain()
                                     )
                                 })}
                         </div>
-                        {activeGameData.length == 0 && userData.length > 0 && hiddenUserIds.length !== userData.length?
-                            <div className="flex justify-center items-center w-full">
-                                <LoadingRipple />
-                            </div>
-                            : null
-                        }
-                        {firstLoadComplete && hiddenUserIds.length == userData.length ?
-                            <div className="flex justify-center items-center w-full">
-                                <p className="w">Hey, it looks like you filtered out all the users. Search for more users, or re-enable the existing ones.</p>
+
+
+
+                        {userData.length == 0 ?
+                            //? TUTORIAL
+                            <div className="w-full h-[80vh] absolute top-4 flex items-center justify-center">
+                                <div id="innerHelp" className="w-4/5 h-full mt-4  rounded-md flex justify-center items-center flex-col">
+                                    <p className="text-2xl font-bold pb-4">How to use</p>
+                                    <img src={"/img/example.png"} className="rounded hidden md:block"></img>
+                                    <img src={"/img/examplemob.png"} className="rounded block md:hidden"></img>
+                                    <div className="pt-6 flex flex-col items-center">
+                                        <p className="text-lg">No idea on steam accounts?</p>
+                                        <div className="flex gap-4">
+                                            <button className="p-2 bg-sky-800 hover:bg-sky-600 mt-2 rounded-md transition duration-300"
+                                                onClick={() => { setUserData([{ "steamid": "76561197979277218", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Dillywilly", "profileurl": "https://steamcommunity.com/id/dillybert/", "avatar": "https://avatars.akamai.steamstatic.com/6d0f132d23035f2ba326bd26db856453b5c44947.jpg", "avatarmedium": "https://avatars.akamai.steamstatic.com/6d0f132d23035f2ba326bd26db856453b5c44947_medium.jpg", "avatarfull": "https://avatars.akamai.steamstatic.com/6d0f132d23035f2ba326bd26db856453b5c44947_full.jpg", "avatarhash": "6d0f132d23035f2ba326bd26db856453b5c44947", "lastlogoff": 1678467857, "personastate": 0, "realname": "Dil", "primaryclanid": "103582791429537453", "timecreated": 1132339729, "personastateflags": 0, "loccountrycode": "GB" }]) }}>
+                                                Load 1 user
+                                            </button>
+                                            <button className="p-2 bg-yellow-800 hover:bg-yellow-600 mt-2 rounded-md transition duration-300"
+                                                onClick={() => { setUserData([{ "steamid": "76561197973020184", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Emro", "profileurl": "https://steamcommunity.com/profiles/76561197973020184/", "avatar": "https://avatars.steamstatic.com/f0d70e593f578580b0ea13267642286b3924d7c8.jpg", "avatarmedium": "https://avatars.steamstatic.com/f0d70e593f578580b0ea13267642286b3924d7c8_medium.jpg", "avatarfull": "https://avatars.steamstatic.com/f0d70e593f578580b0ea13267642286b3924d7c8_full.jpg", "avatarhash": "f0d70e593f578580b0ea13267642286b3924d7c8", "lastlogoff": 1687985643, "personastate": 0, "realname": "Matt", "primaryclanid": "103582791436953013", "timecreated": 1105297680, "personastateflags": 0, "loccountrycode": "GB" }, { "steamid": "76561198133732503", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Undead-Adz", "profileurl": "https://steamcommunity.com/profiles/76561198133732503/", "avatar": "https://avatars.steamstatic.com/960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315.jpg", "avatarmedium": "https://avatars.steamstatic.com/960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315_medium.jpg", "avatarfull": "https://avatars.steamstatic.com/960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315_full.jpg", "avatarhash": "960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315", "lastlogoff": 1687473123, "personastate": 0, "realname": "Adnan", "primaryclanid": "103582791429521408", "timecreated": 1397859647, "personastateflags": 0, "loccountrycode": "GB" }, { "steamid": "76561197998702710", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Orient", "profileurl": "https://steamcommunity.com/id/MetalOrient/", "avatar": "https://avatars.akamai.steamstatic.com/3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9.jpg", "avatarmedium": "https://avatars.akamai.steamstatic.com/3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9_medium.jpg", "avatarfull": "https://avatars.akamai.steamstatic.com/3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9_full.jpg", "avatarhash": "3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9", "lastlogoff": 1682072032, "personastate": 0, "realname": "Nah Bro", "primaryclanid": "103582791435633447", "timecreated": 1211093335, "personastateflags": 0 }]) }}>
+                                                Load 3 users
+                                            </button>
+                                            <button className="p-2 bg-red-800 hover:bg-red-600 mt-2 rounded-md transition duration-300"
+                                                onClick={() => { setUserData([{ "steamid": "76561197973020184", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Emro", "profileurl": "https://steamcommunity.com/profiles/76561197973020184/", "avatar": "https://avatars.steamstatic.com/f0d70e593f578580b0ea13267642286b3924d7c8.jpg", "avatarmedium": "https://avatars.steamstatic.com/f0d70e593f578580b0ea13267642286b3924d7c8_medium.jpg", "avatarfull": "https://avatars.steamstatic.com/f0d70e593f578580b0ea13267642286b3924d7c8_full.jpg", "avatarhash": "f0d70e593f578580b0ea13267642286b3924d7c8", "lastlogoff": 1687985643, "personastate": 0, "realname": "Matt", "primaryclanid": "103582791436953013", "timecreated": 1105297680, "personastateflags": 0, "loccountrycode": "GB" }, { "steamid": "76561198133732503", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Undead-Adz", "profileurl": "https://steamcommunity.com/profiles/76561198133732503/", "avatar": "https://avatars.steamstatic.com/960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315.jpg", "avatarmedium": "https://avatars.steamstatic.com/960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315_medium.jpg", "avatarfull": "https://avatars.steamstatic.com/960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315_full.jpg", "avatarhash": "960e7e5b8a3ab63ee8e0232e1e9f109f5d11e315", "lastlogoff": 1687473123, "personastate": 0, "realname": "Adnan", "primaryclanid": "103582791429521408", "timecreated": 1397859647, "personastateflags": 0, "loccountrycode": "GB" }, { "steamid": "76561197998702710", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Orient", "profileurl": "https://steamcommunity.com/id/MetalOrient/", "avatar": "https://avatars.akamai.steamstatic.com/3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9.jpg", "avatarmedium": "https://avatars.akamai.steamstatic.com/3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9_medium.jpg", "avatarfull": "https://avatars.akamai.steamstatic.com/3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9_full.jpg", "avatarhash": "3d2fd909cc3de7f1ab64094c6d47f8ece587ebc9", "lastlogoff": 1682072032, "personastate": 0, "realname": "Nah Bro", "primaryclanid": "103582791435633447", "timecreated": 1211093335, "personastateflags": 0 }, { "steamid": "76561197984872411", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Doctor Diablos", "profileurl": "https://steamcommunity.com/id/L33tfella_H/", "avatar": "https://avatars.akamai.steamstatic.com/62024040c6fa21c5b186305af9ddb760687ce77f.jpg", "avatarmedium": "https://avatars.akamai.steamstatic.com/62024040c6fa21c5b186305af9ddb760687ce77f_medium.jpg", "avatarfull": "https://avatars.akamai.steamstatic.com/62024040c6fa21c5b186305af9ddb760687ce77f_full.jpg", "avatarhash": "62024040c6fa21c5b186305af9ddb760687ce77f", "lastlogoff": 1682066212, "personastate": 0, "realname": "Henrik Ilmari Ilisson", "primaryclanid": "103582791429537453", "timecreated": 1158145852, "personastateflags": 0, "loccountrycode": "EE", "locstatecode": "01", "loccityid": 14727 }, { "steamid": "76561197968130805", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Anony1c4", "profileurl": "https://steamcommunity.com/id/anonymous1c4/", "avatar": "https://avatars.akamai.steamstatic.com/904e48abbb56d6e41085f64272d276010d2073aa.jpg", "avatarmedium": "https://avatars.akamai.steamstatic.com/904e48abbb56d6e41085f64272d276010d2073aa_medium.jpg", "avatarfull": "https://avatars.akamai.steamstatic.com/904e48abbb56d6e41085f64272d276010d2073aa_full.jpg", "avatarhash": "904e48abbb56d6e41085f64272d276010d2073aa", "lastlogoff": 1680204695, "personastate": 4, "primaryclanid": "103582791429537453", "timecreated": 1092088240, "personastateflags": 0 }, { "steamid": "76561197964454963", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Meng", "profileurl": "https://steamcommunity.com/id/Meng/", "avatar": "https://avatars.akamai.steamstatic.com/e73af38188472f27599698b15cf4eebc0a4d4be1.jpg", "avatarmedium": "https://avatars.akamai.steamstatic.com/e73af38188472f27599698b15cf4eebc0a4d4be1_medium.jpg", "avatarfull": "https://avatars.akamai.steamstatic.com/e73af38188472f27599698b15cf4eebc0a4d4be1_full.jpg", "avatarhash": "e73af38188472f27599698b15cf4eebc0a4d4be1", "lastlogoff": 1680471513, "personastate": 1, "realname": "Steven Meng", "primaryclanid": "103582791429672826", "timecreated": 1076695363, "personastateflags": 0, "loccountrycode": "GB", "locstatecode": "F2" }]) }}>
+                                                Load 6 users
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             : null
                         }
@@ -378,12 +370,7 @@ export default function UsersMain()
                 </div>
 
             </main>
-            {/* 
-                Sample Player IDs
-                76561197968130805 
-                https://steamcommunity.com/profiles/76561198068117347/
-                76561197967241237
-            */}
+
             <PlayerModal
                 visible={userModal?.steamid !== undefined}
                 onClose={() => { setUserModal(undefined) }}

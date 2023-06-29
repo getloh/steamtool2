@@ -304,12 +304,12 @@ export default function UsersMain()
                         {userData.length == 0 ?
                             //? TUTORIAL
                             <div className="w-full h-[80vh] absolute top-4 flex items-center justify-center">
-                                <div id="innerHelp" className="w-4/5 h-full mt-4  rounded-md flex justify-center items-center flex-col">
-                                    <p className="text-2xl font-bold pb-4">How to use</p>
+                                <div id="innerHelp" className="w-4/5 h-full rounded-md flex justify-center items-center flex-col">
+                                    <p className="text-2xl font-bold pt-6 pb-2">How to use</p>
                                     <img src={"/img/example.png"} className="rounded hidden md:block"></img>
                                     <img src={"/img/examplemob.png"} className="rounded block md:hidden"></img>
-                                    <div className="pt-6 flex flex-col items-center">
-                                        <p className="text-lg">No idea on steam accounts?</p>
+                                    <div className="pt-2 flex flex-col items-center">
+                                        <p className="text-md text-center">No idea on steam accounts?</p>
                                         <div className="flex gap-4">
                                             <button className="p-2 bg-sky-800 hover:bg-sky-600 mt-2 rounded-md transition duration-300"
                                                 onClick={() => { setUserData([{ "steamid": "76561197979277218", "communityvisibilitystate": 3, "profilestate": 1, "personaname": "Dillywilly", "profileurl": "https://steamcommunity.com/id/dillybert/", "avatar": "https://avatars.akamai.steamstatic.com/6d0f132d23035f2ba326bd26db856453b5c44947.jpg", "avatarmedium": "https://avatars.akamai.steamstatic.com/6d0f132d23035f2ba326bd26db856453b5c44947_medium.jpg", "avatarfull": "https://avatars.akamai.steamstatic.com/6d0f132d23035f2ba326bd26db856453b5c44947_full.jpg", "avatarhash": "6d0f132d23035f2ba326bd26db856453b5c44947", "lastlogoff": 1678467857, "personastate": 0, "realname": "Dil", "primaryclanid": "103582791429537453", "timecreated": 1132339729, "personastateflags": 0, "loccountrycode": "GB" }]) }}>

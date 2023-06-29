@@ -4,7 +4,7 @@ import { apiVanityLookup } from '@/types/apiResponses';
 
 
 // This route finds the player basic information via the ID number
-export async function GET(req, { params }: any)
+export async function GET(req: Request, { params }: any)
 {
   //Get the playerid from the params
   let playerid = params.playerid;
@@ -56,9 +56,9 @@ export async function GET(req, { params }: any)
      }
   });
 
-  if (data.response){
+  if (data.response && data.response.players !== undefined){
     // console.log(data.response.players[0])
-    return NextResponse.json(data.response.players[0])         // Returns data if found, else 404 status code
+    return NextResponse.json(data?.response?.players[0])         // Returns data if found, else 404 status code
   }
   else {
     return new Response("",{

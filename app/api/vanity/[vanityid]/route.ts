@@ -4,11 +4,11 @@ import { apiPlayerIdSingle } from '@/types/apiResponses';
 
 
 // This route finds the player basic information via the ID number
-export async function GET(req, { params }: any)
+export async function GET(req: Request, { params }: any)
 {
   //Get the playerid from the params
   const vanityid = params.vanityid;
-  let data = {};
+  let data: apiVanityLookup = {response: {success: 42}};
 
   await fetch(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.API_KEY}&vanityurl=${vanityid}`).then(response =>
   {
@@ -31,8 +31,8 @@ export async function GET(req, { params }: any)
      }
   });
 
-  if (data.response.success == 1){
-    const playerdata = await fetch(`../playerid/${data.response.steamid}`)
+  if (data?.response.success == 1){
+    const playerdata = await fetch(`../playerid/${data?.response.steamid}`)
     // .then(res => res.json())
     // .then(
     //     (result: apiPlayerIdSingle) =>

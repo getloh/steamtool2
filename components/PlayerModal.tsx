@@ -54,12 +54,13 @@ export default function PlayerModal(props: PlayerModalProps)
     {
         let hoursPlayed = getHoursPlayed();
         console.log(props.games)
-        if (hoursPlayed !== "No Data"){
+        if (hoursPlayed !== "No Data")
+        {
             let hourPoints = Number(hoursPlayed) / 166;
             let gamePoints = Number(userGameData?.game_count) / 31
 
             return (
-                <IntensityMeter value={hourPoints + gamePoints}/>
+                <IntensityMeter value={hourPoints + gamePoints} />
             )
         }
         return <div></div>
@@ -128,10 +129,13 @@ export default function PlayerModal(props: PlayerModalProps)
                                     <SteamIcon size={"100%"} />
                                 </button>
                             </a>
-                            {props.data?.communityvisibilitystate === 3 && userGameData.games ?
+                            {
+                                //@ts-ignore
 
-                                <p className="text-xl xl:text-2xl text-right p-2 -mb-1">Most played games</p>
-                                : null
+                                props.data?.communityvisibilitystate === 3 && userGameData.games ?
+
+                                    <p className="text-xl xl:text-2xl text-right p-2 -mb-1">Most played games</p>
+                                    : null
                             }
 
                             {/* <button className=" fill-teal-500 h-12 w-12 overflow-hidden object-contain opacity-40 hover:opacity-100 transition duration-500" onClick={() => {console.log(props.data)}}>
@@ -144,34 +148,36 @@ export default function PlayerModal(props: PlayerModalProps)
                     </div>
 
                     {/** //!GAME ZONE */}
-                    {props.data?.communityvisibilitystate === 3 && userGameData.games ?
-                        <div className="h-[55vh]">
-                            {/* <p className="text-lg xl:text-2xl text-right p-2">Most played games</p> */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-2 pr-2 overflow-y-scroll h-full xl:h-auto xl:overflow-y-auto">
 
-                                {userGameData?.games?.sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 10).map((game) =>
-                                {
-                                    return (<GameTile key={game.appid}
-                                        data={game} />)
-                                })}
+                    {//@ts-ignore
+                        props.data?.communityvisibilitystate === 3 && userGameData.games ?
+                            <div className="h-[55vh]">
+                                {/* <p className="text-lg xl:text-2xl text-right p-2">Most played games</p> */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-2 pr-2 overflow-y-scroll h-full xl:h-auto xl:overflow-y-auto">
+
+                                    {userGameData?.games?.sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 10).map((game) =>
+                                    {
+                                        return (<GameTile key={game.appid}
+                                            data={game} />)
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                        :
-                        <div className="flex justify-center items-center flex-col pt-8">
-                            <p className="font-bold">Unable to find game information for this account</p>
-                            <p>Account may have no games, or may be set to limited privacy</p>
-                            <p>If this is your account, review your privacy settings</p>
+                            :
+                            <div className="flex justify-center items-center flex-col pt-8">
+                                <p className="font-bold">Unable to find game information for this account</p>
+                                <p>Account may have no games, or may be set to limited privacy</p>
+                                <p>If this is your account, review your privacy settings</p>
 
-                            {props.data?.communityvisibilitystate === 3 ?
-                                <a href="https://help.steampowered.com/en/faqs/view/588C-C67D-0251-C276" target="_blank" >
-                                    <Button>
-                                        Steam FAQ
-                                    </Button>
-                                </a>
-                                :
-                                null
-                            }
-                        </div>
+                                {props.data?.communityvisibilitystate === 3 ?
+                                    <a href="https://help.steampowered.com/en/faqs/view/588C-C67D-0251-C276" target="_blank" >
+                                        <Button onClick={()=>{}}>
+                                            Steam FAQ
+                                        </Button>
+                                    </a>
+                                    :
+                                    null
+                                }
+                            </div>
                     }
                 </div>
 
@@ -185,10 +191,10 @@ export default function PlayerModal(props: PlayerModalProps)
                             <IntensityMeter value={getIntensity()}/>
                         </div> */}
                         {getIntensity()}
-                            <div className="text-end">
-                                <p className="text-blue-200 text-xs md:text-lg">Total Games: {userGameData?.game_count}</p>
-                                <p className="text-blue-200 text-xs md:text-lg">Hours played: {getHoursPlayed()}</p>
-                            </div>
+                        <div className="text-end">
+                            <p className="text-blue-200 text-xs md:text-lg">Total Games: {userGameData?.game_count}</p>
+                            <p className="text-blue-200 text-xs md:text-lg">Hours played: {getHoursPlayed()}</p>
+                        </div>
                         {/* </div> */}
                         {/* <div id="r" className="flex justify-end h-full mt-4">
                         </div> */}

@@ -3,11 +3,11 @@ import { NextResponse } from 'next/server';
 
 
 // This route finds the game list info via the ID number
-export async function GET(req, { params }: any)
+export async function GET(req: Request, { params }: any)
 {
   //Get the playerid from the params
   const playerid = params.playerid;
-  let data = {};
+  let data:any = {};
 
   await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${process.env.API_KEY}&steamid=${playerid}&format=json&include_appinfo=true&include_played_free_games=true`).then(response =>
   {
@@ -22,6 +22,7 @@ export async function GET(req, { params }: any)
   }).then((jsonResponse : apiGamesList) =>
   {
     // console.log(jsonResponse)
+    //@ts-ignore
     if (jsonResponse.response?.length !== 0)             //? Got a proper response
     {                    
       data = jsonResponse;                                      //Set the data object to the response so we can return it

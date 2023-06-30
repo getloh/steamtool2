@@ -7,6 +7,7 @@ export interface SearchBarProps
     onChange: Function;
     value: string;
     onEnter: Function;
+    loading?: boolean;
 }
 
 export default function SearchBar(props: SearchBarProps)
@@ -27,7 +28,16 @@ export default function SearchBar(props: SearchBarProps)
 
     return (
         <div className="flex relative items-center">
-
+ 
+                <div
+                    className={`inline-block h-6 w-6 mr-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] ${props.loading ? "visible" : "invisible"}`}
+                    role="status">
+                    <span
+                        className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                    >Loading</span
+                    >
+                </div>
+                
             <input name="myInput"
                 className="shadow appearance-none border border-neutral-500 rounded-md w-full py-2 pl-2 pr-10 leading-tight outline-none text-zinc-200 bg-zinc-800 focus:border-2 focus:border-white"
                 value={props.value}

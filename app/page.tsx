@@ -233,8 +233,8 @@ export default function UsersMain()
 
     // useEffect(() =>
     // {
-        // console.log("activeGameData state was updated! It now looks like...")
-        // console.log(activeGameData)
+    // console.log("activeGameData state was updated! It now looks like...")
+    // console.log(activeGameData)
     // }, [activeGameData])
 
     return (
@@ -242,8 +242,11 @@ export default function UsersMain()
 
             <div className="flex justify-between items-center px-4 md:px-10 h-16 bg-sky-950">
                 <Logo />
-                <div className="w-2/3 sm:w-1/2 lg:w-1/3 2xl:w-1/4">
+
+                <div className="w-2/3 sm:w-1/2 lg:w-1/3">
+
                     <SearchBar
+                        loading={loadingUser}
                         value={search}
                         onChange={(text: string) => setSearch(text)}
                         onEnter={fetchPlayer}

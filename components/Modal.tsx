@@ -1,13 +1,8 @@
 
 
-import { apiPlayerIdSingle } from "@/types/apiResponses"
 import { useState, useEffect, ReactNode } from "react";
 import classNames from "classnames";
-import VisibilityIcon from "./icons/VisibilityIcon";
-import VisibilityOffIcon from "./icons/VisibilityOffIcon";
-import DeleteIcon from "./icons/DeleteIcon";
 import CloseIcon from "./icons/CloseIcon";
-
 
 export interface ModalProps
 {
@@ -18,7 +13,6 @@ export interface ModalProps
 
 export default function Modal(props: ModalProps)
 {
-
     const modalStyles = classNames(
         "fixed top-0 left-0 w-full h-full z-20 bg-black bg-opacity-70 items-center justify-center transition duration-500 backdrop-blur-sm opacity-0",
         props.visible ? "flex flex-col visible opacity-100" : "invisible bg-opacity-0",

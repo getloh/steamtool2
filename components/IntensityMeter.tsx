@@ -1,13 +1,7 @@
-import { apiGameData, apiPlayerIdSingle } from "@/types/apiResponses"
-import Image from "next/image";
-import SteamIcon from "./icons/SteamIcon";
-import classNames from "classnames";
-
 export interface IntensityMeterProps
 {
     value: number;
 }
-
 
 export default function IntensityMeter(props: IntensityMeterProps)
 {
@@ -46,7 +40,4 @@ export default function IntensityMeter(props: IntensityMeterProps)
             <p className="text-md md:text-2xl text-left">Player Intensity: {getIntensity(props.value)}</p>
         </div>
     )
-
-
-
 }

@@ -2,10 +2,6 @@
 
 import { apiGamesListResponse, apiPlayerIdSingle } from "@/types/apiResponses"
 import { useState, useEffect } from "react";
-import classNames from "classnames";
-import VisibilityIcon from "./icons/VisibilityIcon";
-import VisibilityOffIcon from "./icons/VisibilityOffIcon";
-import DeleteIcon from "./icons/DeleteIcon";
 import Modal from "./Modal";
 import Image from "next/image";
 import GameTile from "./GameTile";

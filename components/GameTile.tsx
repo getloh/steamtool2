@@ -1,7 +1,6 @@
 import { apiGameData, apiPlayerIdSingle } from "@/types/apiResponses"
 import Image from "next/image";
 import SteamIcon from "./icons/SteamIcon";
-import classNames from "classnames";
 
 export interface GameTileProps
 {
@@ -10,11 +9,8 @@ export interface GameTileProps
     hours?: boolean;
 }
 
-
 export default function GameTile(props: GameTileProps)
 {
-
-
     return (
         <div className="p-2 sm:p-4 bg-neutral-950 flex justify-between relative rounded-md hover:bg-sky-900 group">
             <div className="flex z-10 items-center">
@@ -39,8 +35,6 @@ export default function GameTile(props: GameTileProps)
                 </a>
             </div>
 
-
-
             {props.users ?
                 <div className="flex justify-end items-end gap-1 absolute bottom-2 right-2 z-0 opacity-80">
                     {props.users?.map((user) =>
@@ -64,7 +58,4 @@ export default function GameTile(props: GameTileProps)
 
         </div>
     )
-
-
-
 }

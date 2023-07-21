@@ -1,36 +1,31 @@
 "use client";
 
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import styles from './page.module.css'
 import { useState, useRef, useEffect } from 'react'
 import SearchBar from '@/components/SearchBar';
 import { apiGameData, apiGamesListResponse, apiPlayerData, apiPlayerIdSingle } from '@/types/apiResponses';
 import Avatar from '@/components/Avatar';
 import GameTile from '@/components/GameTile';
-import Modal from '@/components/Modal';
 import PlayerModal from '@/components/PlayerModal';
 import LoadingRipple from '@/components/icons/LoadingRipple';
 import AvatarMobile from '@/components/AvatarMobile';
 import Logo from '@/components/Logo';
-import { Button } from '@/components/Button';
 import Toast from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function UsersMain()
 {
-
-    const [userIds, setUserIds] = useState([]);
-    const [firstLoadComplete, setFirstLoadComplete] = useState(false);
+    const [userIds, setUserIds] = useState<string[]>([]);
+    const [firstLoadComplete, setFirstLoadComplete] = useState<boolean>(false);
     const [hiddenUserIds, setHiddenUserIds] = useState<string[]>([]);         // Used to filter out Ids that we have already fetched
     const [userData, setUserData] = useState<apiPlayerIdSingle[]>([]);      // Holds user api data
     const [userGameData, setUserGameData] = useState<apiGamesListResponse[]>([]);        // An object with userID, and an array of games
-    const [search, setSearch] = useState("");   // used only for the search bar
+    const [search, setSearch] = useState<string>("");   // used only for the search bar
     const [loadingUser, setLoadingUser] = useState(false);
-    const [error, setError] = useState("");     // TODO: Some sort of error toast?
+    const [error, setError] = useState<string>("");     // TODO: Some sort of error toast?
     const [activeGameData, setActiveGameData] = useState<apiGameData[]>([]);    // A combined array of games, with additional users property on each game
-    const [loadingGames, setLoadingGames] = useState(false);
+    const [loadingGames, setLoadingGames] = useState<boolean>(false);
     const [userModal, setUserModal] = useState<apiPlayerIdSingle>();        // Put API data in here to show the player modal
 
     //!TODO: You can search for and add a user even if they already exist
@@ -103,7 +98,7 @@ export default function UsersMain()
     }
 
     /**Finds player based on the search state */
-    async function fetchPlayer()
+    async function fetchPlayer(): Promise<void>
     {
         setLoadingUser(true);
         // console.log("FETCHPLAYER RUN")
@@ -142,7 +137,7 @@ export default function UsersMain()
         setFirstLoadComplete(true);
     }, [userGameData])
 
-    function generateActiveGameDataList()
+    function generateActiveGameDataList(): void
     {
         setLoadingGames(true);
 
@@ -192,19 +187,17 @@ export default function UsersMain()
         setLoadingGames(false);
     }
 
-    function deleteUser(steamid: string)
+    function deleteUser(steamid: string): void
     {
         let newActiveGameData = activeGameData.filter(agd => false)
         let newUserGameData = userGameData.filter(ugd => ugd.steamid !== steamid);
         let newUserData = userData.filter(user => user.steamid !== steamid);
-        // setActiveGameData(newActiveGameData);
         setUserData(newUserData);
-        // setUserGameData(newUserGameData);
         setActiveGameData([]);
         setUserGameData([]);
     }
 
-    function toggleHideUser(steamid: string)
+    function toggleHideUser(steamid: string): void
     {
         // console.log("Hide user attempted - " + steamid)
         setActiveGameData([]);
@@ -220,22 +213,13 @@ export default function UsersMain()
             // Lets hide the user
             setHiddenUserIds(oldArray => [...oldArray, steamid]);
         }
-        // setActiveGameData([]);
-        // generateActiveGameDataList();
     }
 
     useEffect(() =>
     {
-        // console.log("hiddenUserIds was changed")
         generateActiveGameDataList();
-
     }, [hiddenUserIds])
 
-    // useEffect(() =>
-    // {
-    // console.log("activeGameData state was updated! It now looks like...")
-    // console.log(activeGameData)
-    // }, [activeGameData])
 
     return (
         <div className=" bg-neutral-900 text-neutral-300 w-screen">
@@ -256,7 +240,6 @@ export default function UsersMain()
 
             <main className="flex min-h-[calc(100vh-4rem)] flex-col">
                 <div id="maincontent" className="pr-0 w-full md:pr-20 relative">
-
 
                     <div className="h-auto w-auto overflow-clip">
                         {activeGameData.length == 0 && userData.length > 0 && hiddenUserIds.length !== userData.length ?
@@ -301,8 +284,6 @@ export default function UsersMain()
                                     )
                                 })}
                         </div>
-
-
 
                         {userData.length == 0 ?
                             //? TUTORIAL
@@ -382,7 +363,5 @@ export default function UsersMain()
             />
 
         </div>
-
-
     )
 }
